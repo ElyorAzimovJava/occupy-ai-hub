@@ -22,3 +22,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 }
 
 export const useTheme = () => useContext(ThemeCtx);
+
+import { Moon, Sun } from "lucide-react";
+export function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  return (
+    <button onClick={toggle} aria-label="Toggle theme" className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-card text-foreground transition hover:bg-muted">
+      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </button>
+  );
+}
