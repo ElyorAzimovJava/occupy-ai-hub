@@ -19,7 +19,7 @@ export const Route = createFileRoute("/owner/bookings")({
                   <td className="p-4 font-semibold">{b.driver}</td>
                   <td className="p-4 font-mono">{b.plate}</td>
                   <td className="p-4">{b.space}</td>
-                  <td className="p-4 hidden md:table-cell text-muted-foreground">{b.time}</td>
+                  <td className="p-4 hidden md:table-cell text-muted-foreground">{b.start} - {b.end}</td>
                   <td className="p-4"><Badged tone={b.status==="active"?"success":b.status==="pending"?"warning":b.status==="completed"?"info":"danger"}>{b.status}</Badged></td>
                   <td className="p-4 text-right"><div className="flex justify-end gap-2">{b.status === "pending" && (<><Button size="sm" variant="outline" onClick={() => toast.success("Approved")}>Approve</Button><Button size="sm" variant="ghost" onClick={() => toast.error("Rejected")}>Reject</Button></>)}{b.status === "active" && (<><Button size="sm" variant="outline" onClick={() => toast("Extended")}>Extend</Button><Button size="sm" variant="ghost" onClick={() => toast.error("Cancelled")}>Cancel</Button></>)}</div></td>
                 </tr>
