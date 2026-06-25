@@ -10,9 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as OwnerRouteRouteImport } from './routes/owner/route'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OwnerIndexRouteImport } from './routes/owner/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as OwnerSettingsRouteImport } from './routes/owner/settings'
+import { Route as OwnerLiveRouteImport } from './routes/owner/live'
+import { Route as OwnerHistoryRouteImport } from './routes/owner/history'
+import { Route as OwnerEditorRouteImport } from './routes/owner/editor'
+import { Route as OwnerBookingsRouteImport } from './routes/owner/bookings'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminOwnersRouteImport } from './routes/admin/owners'
 import { Route as AdminNotificationsRouteImport } from './routes/admin/notifications'
@@ -25,6 +32,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerRouteRoute = OwnerRouteRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRouteRoute = AdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -35,10 +47,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerIndexRoute = OwnerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OwnerRouteRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const OwnerSettingsRoute = OwnerSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => OwnerRouteRoute,
+} as any)
+const OwnerLiveRoute = OwnerLiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => OwnerRouteRoute,
+} as any)
+const OwnerHistoryRoute = OwnerHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => OwnerRouteRoute,
+} as any)
+const OwnerEditorRoute = OwnerEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => OwnerRouteRoute,
+} as any)
+const OwnerBookingsRoute = OwnerBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => OwnerRouteRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
@@ -74,6 +116,7 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/owner': typeof OwnerRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/lots': typeof AdminLotsRoute
@@ -81,7 +124,13 @@ export interface FileRoutesByFullPath {
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/editor': typeof OwnerEditorRoute
+  '/owner/history': typeof OwnerHistoryRoute
+  '/owner/live': typeof OwnerLiveRoute
+  '/owner/settings': typeof OwnerSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,12 +141,19 @@ export interface FileRoutesByTo {
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/editor': typeof OwnerEditorRoute
+  '/owner/history': typeof OwnerHistoryRoute
+  '/owner/live': typeof OwnerLiveRoute
+  '/owner/settings': typeof OwnerSettingsRoute
   '/admin': typeof AdminIndexRoute
+  '/owner': typeof OwnerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/owner': typeof OwnerRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/lots': typeof AdminLotsRoute
@@ -105,13 +161,20 @@ export interface FileRoutesById {
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/editor': typeof OwnerEditorRoute
+  '/owner/history': typeof OwnerHistoryRoute
+  '/owner/live': typeof OwnerLiveRoute
+  '/owner/settings': typeof OwnerSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/owner'
     | '/auth'
     | '/admin/analytics'
     | '/admin/lots'
@@ -119,7 +182,13 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/owners'
     | '/admin/settings'
+    | '/owner/bookings'
+    | '/owner/editor'
+    | '/owner/history'
+    | '/owner/live'
+    | '/owner/settings'
     | '/admin/'
+    | '/owner/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,11 +199,18 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/owners'
     | '/admin/settings'
+    | '/owner/bookings'
+    | '/owner/editor'
+    | '/owner/history'
+    | '/owner/live'
+    | '/owner/settings'
     | '/admin'
+    | '/owner'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/owner'
     | '/auth'
     | '/admin/analytics'
     | '/admin/lots'
@@ -142,12 +218,19 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/owners'
     | '/admin/settings'
+    | '/owner/bookings'
+    | '/owner/editor'
+    | '/owner/history'
+    | '/owner/live'
+    | '/owner/settings'
     | '/admin/'
+    | '/owner/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  OwnerRouteRoute: typeof OwnerRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
 }
 
@@ -158,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -174,12 +264,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/': {
+      id: '/owner/'
+      path: '/'
+      fullPath: '/owner/'
+      preLoaderRoute: typeof OwnerIndexRouteImport
+      parentRoute: typeof OwnerRouteRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/owner/settings': {
+      id: '/owner/settings'
+      path: '/settings'
+      fullPath: '/owner/settings'
+      preLoaderRoute: typeof OwnerSettingsRouteImport
+      parentRoute: typeof OwnerRouteRoute
+    }
+    '/owner/live': {
+      id: '/owner/live'
+      path: '/live'
+      fullPath: '/owner/live'
+      preLoaderRoute: typeof OwnerLiveRouteImport
+      parentRoute: typeof OwnerRouteRoute
+    }
+    '/owner/history': {
+      id: '/owner/history'
+      path: '/history'
+      fullPath: '/owner/history'
+      preLoaderRoute: typeof OwnerHistoryRouteImport
+      parentRoute: typeof OwnerRouteRoute
+    }
+    '/owner/editor': {
+      id: '/owner/editor'
+      path: '/editor'
+      fullPath: '/owner/editor'
+      preLoaderRoute: typeof OwnerEditorRouteImport
+      parentRoute: typeof OwnerRouteRoute
+    }
+    '/owner/bookings': {
+      id: '/owner/bookings'
+      path: '/bookings'
+      fullPath: '/owner/bookings'
+      preLoaderRoute: typeof OwnerBookingsRouteImport
+      parentRoute: typeof OwnerRouteRoute
     }
     '/admin/settings': {
       id: '/admin/settings'
@@ -250,9 +382,32 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface OwnerRouteRouteChildren {
+  OwnerBookingsRoute: typeof OwnerBookingsRoute
+  OwnerEditorRoute: typeof OwnerEditorRoute
+  OwnerHistoryRoute: typeof OwnerHistoryRoute
+  OwnerLiveRoute: typeof OwnerLiveRoute
+  OwnerSettingsRoute: typeof OwnerSettingsRoute
+  OwnerIndexRoute: typeof OwnerIndexRoute
+}
+
+const OwnerRouteRouteChildren: OwnerRouteRouteChildren = {
+  OwnerBookingsRoute: OwnerBookingsRoute,
+  OwnerEditorRoute: OwnerEditorRoute,
+  OwnerHistoryRoute: OwnerHistoryRoute,
+  OwnerLiveRoute: OwnerLiveRoute,
+  OwnerSettingsRoute: OwnerSettingsRoute,
+  OwnerIndexRoute: OwnerIndexRoute,
+}
+
+const OwnerRouteRouteWithChildren = OwnerRouteRoute._addFileChildren(
+  OwnerRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  OwnerRouteRoute: OwnerRouteRouteWithChildren,
   AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
