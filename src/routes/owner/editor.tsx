@@ -26,7 +26,7 @@ function EditorPage() {
           <div className="border-t border-border pt-4"><div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Legend</div><div className="mt-3"><SlotLegend/></div></div>
         </aside>
         <div className="rounded-2xl border border-border bg-card p-5">
-          <ParkingGrid slots={slots} cols={12} onSlotClick={(id) => setSlots((prev) => prev.map((s) => s.id === id ? { ...s, status: cycle(s.status) } : s))} />
+          <ParkingGrid slots={slots} cols={12} onSelect={(slot) => setSlots((prev) => prev.map((s) => s.id === slot.id ? { ...s, status: cycle(s.status) } : s))} />
         </div>
       </div>
     </div>
