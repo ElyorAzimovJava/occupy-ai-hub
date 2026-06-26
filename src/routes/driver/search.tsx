@@ -23,8 +23,8 @@ function SearchPage() {
         <div className="space-y-3">{items.map((l) => (
           <Link key={l.id} to="/driver/booking" className="block overflow-hidden rounded-2xl border border-border bg-card transition hover:border-primary/40">
             <img src={l.image} alt="" className="h-32 w-full object-cover"/>
-            <div className="p-3"><div className="flex items-start justify-between"><div className="min-w-0"><div className="truncate text-sm font-bold">{l.name}</div><div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground"><MapPin className="h-3 w-3"/>{l.address}</div></div><div className="text-right"><div className="text-sm font-bold text-primary">${l.price}/h</div><div className="flex items-center gap-0.5 text-[11px] text-warning"><Star className="h-3 w-3 fill-current"/>{l.rating}</div></div></div>
-              <div className="mt-3 flex items-center justify-between text-[11px]"><span className="rounded-full bg-success/15 px-2 py-0.5 font-semibold text-success">{l.total-l.occupied-l.reserved} free</span><span className="text-muted-foreground">{l.distance} - {l.hours}</span></div>
+              <div className="p-3"><div className="flex items-start justify-between"><div className="min-w-0"><div className="truncate text-sm font-bold">{l.name}</div><div className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground"><MapPin className="h-3 w-3"/>{l.address}</div></div><div className="text-right"><div className="text-sm font-bold text-primary">${l.pricePerHour}/h</div><div className="flex items-center gap-0.5 text-[11px] text-warning"><Star className="h-3 w-3 fill-current"/>{l.rating}</div></div></div>
+              <div className="mt-3 flex items-center justify-between text-[11px]"><span className="rounded-full bg-success/15 px-2 py-0.5 font-semibold text-success">{l.total-l.occupied-l.reserved} free</span><span className="text-muted-foreground">250m • Open 24/7</span></div>
             </div>
           </Link>
         ))}</div>
