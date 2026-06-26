@@ -60,9 +60,20 @@ export interface Booking {
   amount: number;
 }
 
-const seedSlots = (n: number, occupiedRate = 0.55): ParkingSlot[] =>
-  Array.from({ length: n }, (_, i) => {
-    const r = Math.random();
+// Deterministic PRNG so SSR and client produce identical markup (no hydration mismatch)
+function mulberry32(a: number) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const seedSlots = (n: number, occupiedRate = 0.55, seed = 42): ParkingSlot[] => {
+  const rand = mulberry32(seed);
+  return Array.from({ length: n }, (_, i) => {
+    const r = rand();
     let status: SlotStatus = "available";
     if (r < occupiedRate) status = "occupied";
     else if (r < occupiedRate + 0.18) status = "reserved";
@@ -71,21 +82,22 @@ const seedSlots = (n: number, occupiedRate = 0.55): ParkingSlot[] =>
       id: `s-${i + 1}`,
       label: `${String.fromCharCode(65 + Math.floor(i / 10))}${(i % 10) + 1}`,
       status,
-      confidence: 0.82 + Math.random() * 0.17,
-      plate: status === "occupied" ? randomPlate() : undefined,
+      confidence: 0.82 + rand() * 0.17,
+      plate: status === "occupied" ? randomPlate(rand) : undefined,
     };
   });
+};
 
-function randomPlate() {
+function randomPlate(rand: () => number = Math.random) {
   const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
   return (
-    letters[Math.floor(Math.random() * letters.length)] +
-    letters[Math.floor(Math.random() * letters.length)] +
+    letters[Math.floor(rand() * letters.length)] +
+    letters[Math.floor(rand() * letters.length)] +
     " " +
-    Math.floor(100 + Math.random() * 900) +
+    Math.floor(100 + rand() * 900) +
     " " +
-    letters[Math.floor(Math.random() * letters.length)] +
-    letters[Math.floor(Math.random() * letters.length)]
+    letters[Math.floor(rand() * letters.length)] +
+    letters[Math.floor(rand() * letters.length)]
   );
 }
 
