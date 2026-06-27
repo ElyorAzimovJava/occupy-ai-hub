@@ -55,8 +55,10 @@ function Activity() {
   }, []);
 
   const bookings = useBookings();
+  // Show the most recently created booking that is still in-flight.
+  // Bookings list is unshifted (newest first), so any pending takes precedence over older active sessions.
   const liveBooking = useMemo(
-    () => bookings.find((b) => b.status === "active") || bookings.find((b) => b.status === "pending") || null,
+    () => bookings.find((b) => b.status === "pending" || b.status === "active") || null,
     [bookings],
   );
 
