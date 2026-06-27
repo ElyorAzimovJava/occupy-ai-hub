@@ -313,28 +313,41 @@ function CardDialog({ open, onClose, driverId, holderDefault }: { open: boolean;
 function AccountSettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent>
-        <DialogHeader><DialogTitle>Hisob sozlamalari</DialogTitle></DialogHeader>
-        <div className="space-y-2">
-          <RowBtn label="Parolni o'zgartirish" onClick={() => toast("Parol o'zgartirish havolasi emailga yuborildi")} />
-          <RowBtn label="Tilni tanlash" onClick={() => toast("Til: O'zbekcha (faol)")} />
-          <RowBtn label="Maxfiylik siyosati" onClick={() => toast.message("Maxfiylik siyosati", { description: "Tez orada qo'shiladi" })} />
-          <RowBtn label="Ma'lumotlarni yuklab olish" onClick={() => toast.success("So'rov yuborildi")} />
-          <RowBtn danger label="Hisobni o'chirish" onClick={() => toast.error("Hisobni o'chirish uchun qo'llab-quvvatlashga murojaat qiling")} />
+      <DialogContent
+        className="max-w-sm gap-0 overflow-hidden rounded-2xl border-0 bg-[#0F172A] p-0 text-white shadow-2xl [&>button]:hidden"
+      >
+        <div className="flex items-center justify-between px-5 pt-5 pb-4">
+          <h2 className="text-lg font-extrabold">Hisob sozlamalari</h2>
+          <button onClick={onClose} aria-label="Yopish" className="grid h-7 w-7 place-items-center rounded-full text-slate-300 hover:bg-white/10">
+            <X className="h-4 w-4" />
+          </button>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Yopish</Button>
-        </DialogFooter>
+        <div className="space-y-2 px-3 pb-3">
+          <DarkRow label="Parolni o'zgartirish" onClick={() => toast("Parol o'zgartirish havolasi emailga yuborildi")} />
+          <DarkRow label="Tilni tanlash" hint="O'zbekcha" onClick={() => toast("Til: O'zbekcha (faol)")} />
+          <DarkRow label="Maxfiylik siyosati" onClick={() => toast.message("Maxfiylik siyosati", { description: "Tez orada qo'shiladi" })} />
+          <DarkRow label="Ma'lumotlarni yuklab olish" onClick={() => toast.success("So'rov yuborildi")} />
+          <DarkRow label="Hisobni o'chirish" danger onClick={() => toast.error("Hisobni o'chirish uchun qo'llab-quvvatlashga murojaat qiling")} />
+        </div>
+        <div className="px-5 pb-5 pt-1">
+          <Button onClick={onClose} className="w-full rounded-xl bg-[#1D4ED8] py-5 text-sm font-bold hover:bg-[#1E40AF]">Yopish</Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
 
-function RowBtn({ label, onClick, danger }: { label: string; onClick: () => void; danger?: boolean }) {
+function DarkRow({ label, onClick, danger, hint }: { label: string; onClick: () => void; danger?: boolean; hint?: string }) {
   return (
-    <button onClick={onClick} className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-50 ${danger ? "text-rose-600" : "text-slate-800"}`}>
-      {label}
-      <ChevronRight className="h-4 w-4 text-slate-400" />
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center justify-between rounded-xl bg-white/5 px-4 py-3.5 text-left text-sm font-semibold ring-1 ring-white/5 transition hover:bg-white/10 ${danger ? "text-rose-400" : "text-white"}`}
+    >
+      <div className="flex flex-col">
+        <span>{label}</span>
+        {hint && <span className="mt-0.5 text-[11px] font-medium text-slate-400">{hint}</span>}
+      </div>
+      <ChevronRight className={`h-4 w-4 ${danger ? "text-rose-400" : "text-slate-400"}`} />
     </button>
   );
 }
