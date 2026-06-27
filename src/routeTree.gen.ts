@@ -25,7 +25,6 @@ import { Route as OwnerBookingsRouteImport } from './routes/owner/bookings'
 import { Route as DriverSearchRouteImport } from './routes/driver/search'
 import { Route as DriverProfileRouteImport } from './routes/driver/profile'
 import { Route as DriverHistoryRouteImport } from './routes/driver/history'
-import { Route as DriverBookingRouteImport } from './routes/driver/booking'
 import { Route as DriverActivityRouteImport } from './routes/driver/activity'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminOwnersRouteImport } from './routes/admin/owners'
@@ -114,11 +113,6 @@ const DriverHistoryRoute = DriverHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => DriverRouteRoute,
 } as any)
-const DriverBookingRoute = DriverBookingRouteImport.update({
-  id: '/booking',
-  path: '/booking',
-  getParentRoute: () => DriverRouteRoute,
-} as any)
 const DriverActivityRoute = DriverActivityRouteImport.update({
   id: '/activity',
   path: '/activity',
@@ -168,7 +162,6 @@ export interface FileRoutesByFullPath {
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/driver/activity': typeof DriverActivityRoute
-  '/driver/booking': typeof DriverBookingRoute
   '/driver/history': typeof DriverHistoryRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/search': typeof DriverSearchRoute
@@ -191,7 +184,6 @@ export interface FileRoutesByTo {
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/driver/activity': typeof DriverActivityRoute
-  '/driver/booking': typeof DriverBookingRoute
   '/driver/history': typeof DriverHistoryRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/search': typeof DriverSearchRoute
@@ -218,7 +210,6 @@ export interface FileRoutesById {
   '/admin/owners': typeof AdminOwnersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/driver/activity': typeof DriverActivityRoute
-  '/driver/booking': typeof DriverBookingRoute
   '/driver/history': typeof DriverHistoryRoute
   '/driver/profile': typeof DriverProfileRoute
   '/driver/search': typeof DriverSearchRoute
@@ -246,7 +237,6 @@ export interface FileRouteTypes {
     | '/admin/owners'
     | '/admin/settings'
     | '/driver/activity'
-    | '/driver/booking'
     | '/driver/history'
     | '/driver/profile'
     | '/driver/search'
@@ -269,7 +259,6 @@ export interface FileRouteTypes {
     | '/admin/owners'
     | '/admin/settings'
     | '/driver/activity'
-    | '/driver/booking'
     | '/driver/history'
     | '/driver/profile'
     | '/driver/search'
@@ -295,7 +284,6 @@ export interface FileRouteTypes {
     | '/admin/owners'
     | '/admin/settings'
     | '/driver/activity'
-    | '/driver/booking'
     | '/driver/history'
     | '/driver/profile'
     | '/driver/search'
@@ -431,13 +419,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverHistoryRouteImport
       parentRoute: typeof DriverRouteRoute
     }
-    '/driver/booking': {
-      id: '/driver/booking'
-      path: '/booking'
-      fullPath: '/driver/booking'
-      preLoaderRoute: typeof DriverBookingRouteImport
-      parentRoute: typeof DriverRouteRoute
-    }
     '/driver/activity': {
       id: '/driver/activity'
       path: '/activity'
@@ -516,7 +497,6 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 
 interface DriverRouteRouteChildren {
   DriverActivityRoute: typeof DriverActivityRoute
-  DriverBookingRoute: typeof DriverBookingRoute
   DriverHistoryRoute: typeof DriverHistoryRoute
   DriverProfileRoute: typeof DriverProfileRoute
   DriverSearchRoute: typeof DriverSearchRoute
@@ -525,7 +505,6 @@ interface DriverRouteRouteChildren {
 
 const DriverRouteRouteChildren: DriverRouteRouteChildren = {
   DriverActivityRoute: DriverActivityRoute,
-  DriverBookingRoute: DriverBookingRoute,
   DriverHistoryRoute: DriverHistoryRoute,
   DriverProfileRoute: DriverProfileRoute,
   DriverSearchRoute: DriverSearchRoute,
