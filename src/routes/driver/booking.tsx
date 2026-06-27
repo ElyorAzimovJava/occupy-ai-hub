@@ -10,6 +10,7 @@ import { useGeolocation } from "@/lib/useGeolocation";
 import { formatUzs, USD_TO_UZS } from "@/lib/aiRecommend";
 import { formatDistance } from "@/components/ParkingMap";
 import { bookingStore } from "@/lib/bookingStore";
+import { useCurrentDriver } from "@/lib/session";
 
 type SearchParams = { lot?: string };
 
@@ -32,19 +33,6 @@ function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: num
   return 2 * R * Math.asin(Math.sqrt(x));
 }
 
-const DRIVER = {
-  name: "Azizbek Karimov",
-  phone: "+998 90 123 45 67",
-  rating: 4.9,
-  trips: 142,
-  initials: "AK",
-};
-
-const VEHICLES = [
-  { id: "v1", name: "Toyota Camry", plate: "01 A 777 BA", color: "Oq", year: 2022 },
-  { id: "v2", name: "Chevrolet Cobalt", plate: "01 B 442 KK", color: "Kumush", year: 2020 },
-];
-
 const PAYMENTS = [
   { id: "p1", brand: "UZCARD", last4: "4455", expiry: "09/27" },
   { id: "p2", brand: "HUMO", last4: "8821", expiry: "12/26" },
@@ -55,6 +43,8 @@ function BookingFlow() {
   const lots = useRealtimeLots();
   const geo = useGeolocation();
   const navigate = useNavigate();
+  const driver = useCurrentDriver();
+  const VEHICLES = driver.vehicles;
 
   const lot = useMemo(
     () => lots.find((l) => l.id === lotId) ?? mockLots.find((l) => l.id === lotId) ?? lots[0] ?? mockLots[0],
@@ -71,13 +61,13 @@ function BookingFlow() {
   const serviceFeeUzs = 2000;
   const totalUzs = hourlyUzs + serviceFeeUzs;
 
-  const [vehicleId, setVehicleId] = useState(VEHICLES[0].id);
+  const [vehicleId, setVehicleId] = useState(VEHICLES[0]?.id ?? "v1");
   const [paymentId, setPaymentId] = useState(PAYMENTS[0].id);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [createdId, setCreatedId] = useState<string | null>(null);
 
-  const vehicle = VEHICLES.find((v) => v.id === vehicleId)!;
+  const vehicle = VEHICLES.find((v) => v.id === vehicleId) ?? VEHICLES[0];
   const payment = PAYMENTS.find((p) => p.id === paymentId)!;
 
   const confirm = () => {
@@ -90,9 +80,9 @@ function BookingFlow() {
         lotAddress: lot.address,
         spot: "",       // joy parking xodimi tomonidan tasdiqlanganda belgilanadi
         level: "",
-        driverName: DRIVER.name,
-        driverPhone: DRIVER.phone,
-        driverInitials: DRIVER.initials,
+        driverName: driver.name,
+        driverPhone: driver.phone,
+        driverInitials: driver.initials,
         vehicle: vehicle.name,
         plate: vehicle.plate,
         rateUzs: hourlyUzs,
@@ -181,13 +171,13 @@ function BookingFlow() {
       <Section title="Haydovchi ma'lumotlari" icon={<User className="h-4 w-4 text-slate-400" />}>
         <div className="flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] text-sm font-bold text-white ring-2 ring-blue-100">
-            {DRIVER.initials}
+            {driver.initials}
           </div>
           <div className="flex-1">
-            <div className="text-sm font-bold text-slate-900">{DRIVER.name}</div>
+            <div className="text-sm font-bold text-slate-900">{driver.name}</div>
             <div className="mt-0.5 flex items-center gap-3 text-[11px] text-slate-500">
-              <span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{DRIVER.phone}</span>
-              <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-amber-400 text-amber-400" />{DRIVER.rating}</span>
+              <span className="inline-flex items-center gap-1"><Phone className="h-3 w-3" />{driver.phone}</span>
+              <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-amber-400 text-amber-400" />{driver.rating}</span>
             </div>
           </div>
           <div className="rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700 ring-1 ring-emerald-200">
