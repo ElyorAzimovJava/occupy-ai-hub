@@ -20,6 +20,7 @@ export interface DriverBooking {
   confirmedAt?: number;     // owner tasdiqlagan vaqt — charge shu yerdan boshlanadi
   endedAt?: number;
   amountUzs?: number;
+  walkIn?: boolean;         // owner tomonidan qo'lda qo'shilgan (app foydalanmagan driver)
 }
 
 const KEY = "osonparking.bookings.v1";
@@ -73,8 +74,34 @@ export const bookingStore = {
     }
     return item;
   },
-  confirm(id: string) {
-    write(read().map((x) => (x.id === id ? { ...x, status: "active", confirmedAt: Date.now() } : x)));
+  confirm(id: string, opts?: { spot?: string; level?: string }) {
+    write(read().map((x) =>
+      x.id === id
+        ? {
+            ...x,
+            status: "active",
+            confirmedAt: Date.now(),
+            spot: opts?.spot ?? x.spot,
+            level: opts?.level ?? x.level,
+          }
+        : x,
+    ));
+  },
+  assignSpot(id: string, spot: string, level?: string) {
+    write(read().map((x) => (x.id === id ? { ...x, spot, level: level ?? x.level } : x)));
+  },
+  addWalkIn(input: Omit<DriverBooking, "id" | "status" | "createdAt" | "confirmedAt" | "walkIn">): DriverBooking {
+    const now = Date.now();
+    const item: DriverBooking = {
+      ...input,
+      id: "OSP-" + Math.floor(100000 + Math.random() * 900000),
+      status: "active",
+      walkIn: true,
+      createdAt: now,
+      confirmedAt: now,
+    };
+    write([item, ...read()]);
+    return item;
   },
   end(id: string) {
     write(read().map((x) => {
