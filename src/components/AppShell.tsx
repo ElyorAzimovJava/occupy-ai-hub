@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useTheme } from "@/lib/theme";
+import { session } from "@/lib/session";
 import {
   Bell,
   Search,
