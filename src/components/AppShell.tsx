@@ -131,7 +131,7 @@ export function AppShell({
                     <ChevronDown className="hidden h-3 w-3 text-muted-foreground sm:block" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className={userExtras ? "w-80" : "w-56"}>
                   <DropdownMenuLabel>Signed in as {user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {userExtras && (
