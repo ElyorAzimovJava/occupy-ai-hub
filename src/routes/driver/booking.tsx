@@ -88,8 +88,8 @@ function BookingFlow() {
         lotId: lot.id,
         lotName: lot.name,
         lotAddress: lot.address,
-        spot: `A-${Math.floor(Math.random() * 30) + 1}`,
-        level: "P2",
+        spot: "",       // joy parking xodimi tomonidan tasdiqlanganda belgilanadi
+        level: "",
         driverName: DRIVER.name,
         driverPhone: DRIVER.phone,
         driverInitials: DRIVER.initials,
