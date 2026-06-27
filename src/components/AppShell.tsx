@@ -144,8 +144,14 @@ export function AppShell({
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem>Billing</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/auth">Sign out</Link>
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.preventDefault();
+                      try { session.signOut(); } catch {}
+                      window.location.href = "/";
+                    }}
+                  >
+                    Sign out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
