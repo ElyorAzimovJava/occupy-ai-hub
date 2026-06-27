@@ -130,7 +130,7 @@ function SearchPage() {
           {sortedPlain.slice(0, 12).map(({ lot, dist }) => {
             const free = Math.max(0, lot.total - lot.occupied - lot.reserved);
             return (
-              <Link key={lot.id} to="/driver/booking" className="flex items-center gap-3 rounded-2xl bg-white p-2.5 shadow-sm ring-1 ring-slate-200">
+              <Link key={lot.id} to="/driver/booking" search={{ lot: lot.id }} className="flex items-center gap-3 rounded-2xl bg-white p-2.5 shadow-sm ring-1 ring-slate-200">
                 <img src={lot.image} alt="" className="h-14 w-14 shrink-0 rounded-xl object-cover" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-bold text-slate-900">{lot.name}</div>
@@ -239,7 +239,7 @@ function BestChoiceCard({ candidate, onReject }: { candidate: AiCandidate; onRej
       </div>
 
       <div className="mt-4 grid grid-cols-[1fr,auto] gap-2">
-        <Link to="/driver/booking" className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#1D4ED8] text-sm font-bold text-white shadow-lg shadow-blue-200 transition active:scale-[0.98]">
+        <Link to="/driver/booking" search={{ lot: lot.id }} className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#1D4ED8] text-sm font-bold text-white shadow-lg shadow-blue-200 transition active:scale-[0.98]">
           <Navigation className="h-4 w-4" /> Hozir Borish
         </Link>
         <button onClick={onReject} title="Boshqa variant"
@@ -282,7 +282,7 @@ function AlternativeRow({ candidate, onSkip }: { candidate: AiCandidate; onSkip:
       <button onClick={onSkip} className="grid h-8 w-8 place-items-center rounded-full bg-white text-slate-400 ring-1 ring-slate-200 hover:text-rose-500" title="O'tkazib yuborish">
         <X className="h-3.5 w-3.5" />
       </button>
-      <Link to="/driver/booking" className="grid h-8 w-8 place-items-center rounded-full bg-white text-[#1D4ED8] ring-1 ring-blue-200">
+      <Link to="/driver/booking" search={{ lot: lot.id }} className="grid h-8 w-8 place-items-center rounded-full bg-white text-[#1D4ED8] ring-1 ring-blue-200">
         <ChevronRight className="h-4 w-4" />
       </Link>
     </div>
