@@ -143,12 +143,17 @@ function SignIn({ onSwitch }: { onSwitch: () => void }) {
 function SignUp({ onSwitch }: { onSwitch: () => void }) {
   const [step, setStep] = useState(1);
   const [data, setData] = useState({
-    name: "", phone: "", model: "", plate: "", color: "",
+    name: "", phone: "", password: "", confirm: "", model: "", plate: "", color: "",
   });
+  const [showPw, setShowPw] = useState(false);
+  const [showPw2, setShowPw2] = useState(false);
   const navigate = useNavigate();
 
   const next = () => {
     if (step === 1 && !data.name.trim()) return toast.error("Ismingizni kiriting");
+    if (step === 1 && !data.phone.trim()) return toast.error("Telefon raqamini kiriting");
+    if (step === 1 && data.password.length < 6) return toast.error("Parol kamida 6 ta belgidan iborat bo'lsin");
+    if (step === 1 && data.password !== data.confirm) return toast.error("Parollar mos kelmadi");
     if (step === 2 && !data.plate.trim()) return toast.error("Davlat raqamini kiriting");
     setStep(step + 1);
   };
@@ -203,6 +208,35 @@ function SignUp({ onSwitch }: { onSwitch: () => void }) {
                   className="flex-1 bg-transparent outline-none placeholder:text-slate-400"
                 />
               </FieldSimple>
+            </FormGroup>
+            <FormGroup label="Parol">
+              <FieldSimple icon={<Lock className="h-5 w-5 text-slate-500" />}>
+                <input
+                  type={showPw ? "text" : "password"}
+                  value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })}
+                  placeholder="Kamida 6 ta belgi"
+                  className="flex-1 bg-transparent outline-none placeholder:text-slate-400"
+                />
+                <button type="button" onClick={() => setShowPw(!showPw)} className="text-slate-400 hover:text-slate-600">
+                  {showPw ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </FieldSimple>
+            </FormGroup>
+            <FormGroup label="Parolni tasdiqlang">
+              <FieldSimple icon={<Lock className="h-5 w-5 text-slate-500" />}>
+                <input
+                  type={showPw2 ? "text" : "password"}
+                  value={data.confirm} onChange={(e) => setData({ ...data, confirm: e.target.value })}
+                  placeholder="Parolni qaytadan kiriting"
+                  className="flex-1 bg-transparent outline-none placeholder:text-slate-400"
+                />
+                <button type="button" onClick={() => setShowPw2(!showPw2)} className="text-slate-400 hover:text-slate-600">
+                  {showPw2 ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </FieldSimple>
+              {data.confirm.length > 0 && data.password !== data.confirm && (
+                <p className="mt-1.5 text-xs font-medium text-rose-600">Parollar mos kelmadi</p>
+              )}
             </FormGroup>
           </CardBlock>
         )}
