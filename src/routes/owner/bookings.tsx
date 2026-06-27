@@ -11,6 +11,7 @@ import {
 import { SpotPicker } from "@/components/SpotPicker";
 import { useCurrentOwner } from "@/lib/session";
 import { mockLots } from "@/lib/mockData";
+import { spotStore } from "@/lib/spotStore";
 
 export const Route = createFileRoute("/owner/bookings")({
   head: () => ({ meta: [{ title: "Bookings - Owner" }] }),
@@ -227,6 +228,7 @@ function DriverBookingCard({ b, now, kind }: { b: DriverBooking; now: number; ki
               className="bg-[#1D4ED8] hover:bg-blue-700"
               onClick={() => {
                 if (!assigned) { toast.error("Avval joyni tanlang"); return; }
+                spotStore.occupy(b.lotId, assigned.level, assigned.spot, b.id);
                 bookingStore.confirm(b.id, assigned);
                 toast.success(`Tasdiqlandi: ${assigned.spot} · ${assigned.level}`);
               }}
@@ -251,7 +253,11 @@ function DriverBookingCard({ b, now, kind }: { b: DriverBooking; now: number; ki
             <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Hozirgi xarajat</div>
             <div className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">{formatUzsPlain(cost)} so'm</div>
           </div>
-          <Button size="sm" variant="outline" onClick={() => { bookingStore.end(b.id); toast("Sessiya tugatildi"); }}>
+          <Button size="sm" variant="outline" onClick={() => {
+            if (b.spot && b.level) spotStore.release(b.lotId, b.level, b.spot);
+            bookingStore.end(b.id);
+            toast("Sessiya tugatildi");
+          }}>
             Tugatish
           </Button>
         </div>
