@@ -13,7 +13,7 @@ import { aiRecommend, type AiCandidate } from "@/lib/aiRecommend";
 import { formatUzs } from "@/lib/aiRecommend";
 
 export const Route = createFileRoute("/driver/search")({
-  head: () => ({ meta: [{ title: "AI Smart Selection - Driver" }] }),
+  head: () => ({ meta: [{ title: "AI tanlov - Haydovchi" }] }),
   component: SearchPage,
 });
 
