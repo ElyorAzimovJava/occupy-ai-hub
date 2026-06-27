@@ -120,7 +120,7 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
           labelOrigin: new window.google.maps.Point(12, 12),
         },
         label: {
-          text: full ? "FULL" : String(free),
+          text: full ? "TO‘LIQ" : String(free),
           color: "#ffffff",
           fontSize: full ? "9px" : "11px",
           fontWeight: "800",
@@ -163,7 +163,7 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
         onUserLocation?.(loc);
         if (mapRef.current) mapRef.current.setZoom(14);
       },
-      () => setError("Location permission denied"),
+      () => setError("Joylashuvga ruxsat berilmadi"),
       { enableHighAccuracy: true, timeout: 8000 },
     );
   };
@@ -178,7 +178,7 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
       <div ref={ref} className="absolute inset-0 bg-slate-100" />
       {loading && (
         <div className="absolute inset-0 grid place-items-center bg-slate-100 text-slate-500">
-          <div className="flex items-center gap-2 text-sm"><Loader2 className="h-4 w-4 animate-spin"/>Loading map…</div>
+          <div className="flex items-center gap-2 text-sm"><Loader2 className="h-4 w-4 animate-spin"/>Xarita yuklanmoqda…</div>
         </div>
       )}
       {error && (
@@ -186,7 +186,7 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
       )}
       <button
         onClick={handleLocate}
-        aria-label="My location"
+        aria-label="Mening joylashuvim"
         className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white text-[#1D4ED8] shadow-lg ring-1 ring-slate-200 transition hover:scale-105 active:scale-95 disabled:opacity-60"
         disabled={locating}
       >

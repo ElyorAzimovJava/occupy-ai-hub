@@ -14,7 +14,7 @@ import { mockLots } from "@/lib/mockData";
 import { spotStore } from "@/lib/spotStore";
 
 export const Route = createFileRoute("/owner/bookings")({
-  head: () => ({ meta: [{ title: "Bookings - Owner" }] }),
+  head: () => ({ meta: [{ title: "Bronlar - Egasi" }] }),
   component: OwnerBookings,
 });
 
@@ -36,7 +36,7 @@ function OwnerBookings() {
   return (
     <div>
       <PageHeader
-        title="Bookings"
+        title="Bronlar"
         subtitle="App orqali kelgan bronlarni tasdiqlang yoki app'siz kelgan driverni qo'lda qo'shing."
       />
 
@@ -60,7 +60,7 @@ function OwnerBookings() {
           tone="amber"
           title="Kutilayotgan kelishlar"
           sub="Driver tomonidan yuborilgan, hali parkingga yetib bormagan"
-          rightBadge={`${pending.length} pending`}
+          rightBadge={`${pending.length} kutilmoqda`}
         />
         {pending.length === 0 ? (
           <EmptyCard text="Hozircha yangi bron yo'q. Driver ilovasidan bron qilinganda shu yerda paydo bo'ladi." />
@@ -79,7 +79,7 @@ function OwnerBookings() {
             tone="emerald"
             title="Faol sessiyalar"
             sub="Tasdiqlangan va charge bo'layotgan haydovchilar"
-            rightBadge={`${active.length} live`}
+            rightBadge={`${active.length} jonli`}
           />
           <div className="grid gap-3 md:grid-cols-2">
             {active.map((b) => <DriverBookingCard key={b.id} b={b} now={now} kind="active" />)}
@@ -99,12 +99,12 @@ function OwnerBookings() {
               <thead className="bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
                   <th className="p-4">Bron</th>
-                  <th className="p-4">Driver</th>
-                  <th className="p-4">Vehicle</th>
-                  <th className="p-4">Space</th>
+                  <th className="p-4">Haydovchi</th>
+                  <th className="p-4">Avtomobil</th>
+                  <th className="p-4">Joy</th>
                   <th className="p-4 hidden md:table-cell">Davomiyligi</th>
                   <th className="p-4">Summa</th>
-                  <th className="p-4">Status</th>
+                  <th className="p-4">Holat</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,7 +126,7 @@ function OwnerBookings() {
                       <td className="p-4">{b.spot || "—"}</td>
                       <td className="p-4 hidden md:table-cell text-muted-foreground">{Math.floor(durMin/60)}s {durMin%60}d</td>
                       <td className="p-4 font-semibold">{formatUzsPlain(b.amountUzs || 0)} so'm</td>
-                      <td className="p-4"><Badged tone={b.status === "completed" ? "info" : "danger"}>{b.status}</Badged></td>
+                      <td className="p-4"><Badged tone={b.status === "completed" ? "info" : "danger"}>{b.status === "completed" ? "Tugatilgan" : "Bekor qilingan"}</Badged></td>
                     </tr>
                   );
                 })}

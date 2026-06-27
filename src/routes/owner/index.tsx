@@ -9,7 +9,7 @@ import { useBookings } from "@/lib/bookingStore";
 import { Hourglass } from "lucide-react";
 
 export const Route = createFileRoute("/owner/")({
-  head: () => ({ meta: [{ title: "Dashboard - Owner" }] }),
+  head: () => ({ meta: [{ title: "Boshqaruv paneli - Egasi" }] }),
   component: OwnerDashboard,
 });
 
@@ -23,18 +23,18 @@ function OwnerDashboard() {
   const live = all.filter((b) => b.status === "active" || b.status === "pending").slice(0, 6);
   return (
     <div>
-      <PageHeader title={lot.name} subtitle={`${lot.address} · ${lot.total} spaces · AI vision live`} actions={<Button size="sm">New booking</Button>} />
+      <PageHeader title={lot.name} subtitle={`${lot.address} · ${lot.total} ta joy · AI vision faol`} actions={<Button size="sm">Yangi bron</Button>} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <StatCard label="Total Spaces" value={String(lot.total)} icon={ParkingSquare} />
-        <StatCard label="Occupied" value={String(lot.occupied)} delta={`${Math.round(lot.occupied / lot.total * 100)}%`} icon={ParkingSquare} tone="warning" />
-        <StatCard label="Reserved" value={String(lot.reserved)} icon={CalendarClock} />
-        <StatCard label="Available" value={String(free)} delta={`${Math.round(free / lot.total * 100)}%`} icon={CheckSquare} tone="success" />
-        <StatCard label="Pending" value={String(all.filter((b) => b.status === "pending").length)} icon={Hourglass} tone="warning" />
-        <StatCard label="This month" value={`$${(lot.revenue/1000).toFixed(1)}k`} delta="+12% MoM" icon={TrendingUp} tone="success" />
+        <StatCard label="Jami joylar" value={String(lot.total)} icon={ParkingSquare} />
+        <StatCard label="Band" value={String(lot.occupied)} delta={`${Math.round(lot.occupied / lot.total * 100)}%`} icon={ParkingSquare} tone="warning" />
+        <StatCard label="Bron qilingan" value={String(lot.reserved)} icon={CalendarClock} />
+        <StatCard label="Boʻsh" value={String(free)} delta={`${Math.round(free / lot.total * 100)}%`} icon={CheckSquare} tone="success" />
+        <StatCard label="Kutilmoqda" value={String(all.filter((b) => b.status === "pending").length)} icon={Hourglass} tone="warning" />
+        <StatCard label="Bu oy" value={`$${(lot.revenue/1000).toFixed(1)}k`} delta="oygа +12%" icon={TrendingUp} tone="success" />
       </div>
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5 lg:col-span-2">
-          <h3 className="text-sm font-semibold">Today's occupancy</h3>
+          <h3 className="text-sm font-semibold">Bugungi bandlik</h3>
           <div className="mt-4 h-72">
             <ResponsiveContainer>
               <AreaChart data={occupancySeries}>
@@ -49,7 +49,7 @@ function OwnerDashboard() {
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold">Live bookings</h3>
+          <h3 className="text-sm font-semibold">Jonli bronlar</h3>
           <div className="mt-3 space-y-2">
             {live.length === 0 && (
               <div className="rounded-xl border border-dashed border-border p-6 text-center text-xs text-muted-foreground">

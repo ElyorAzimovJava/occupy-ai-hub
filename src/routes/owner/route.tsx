@@ -10,12 +10,12 @@ import { mockLots, mockOwners } from "@/lib/mockData";
 import { useBookings } from "@/lib/bookingStore";
 
 const nav: NavItem[] = [
-  { label: "Dashboard", to: "/owner", icon: LayoutDashboard },
-  { label: "Space Editor", to: "/owner/editor", icon: Grid3x3 },
-  { label: "Live Monitoring", to: "/owner/live", icon: MonitorPlay, badge: "Live" },
-  { label: "Bookings", to: "/owner/bookings", icon: CalendarCheck, badge: "4" },
-  { label: "History", to: "/owner/history", icon: History },
-  { label: "Settings", to: "/owner/settings", icon: Settings },
+  { label: "Boshqaruv paneli", to: "/owner", icon: LayoutDashboard },
+  { label: "Joylar muharriri", to: "/owner/editor", icon: Grid3x3 },
+  { label: "Jonli monitoring", to: "/owner/live", icon: MonitorPlay, badge: "Jonli" },
+  { label: "Bronlar", to: "/owner/bookings", icon: CalendarCheck, badge: "4" },
+  { label: "Tarix", to: "/owner/history", icon: History },
+  { label: "Sozlamalar", to: "/owner/settings", icon: Settings },
 ];
 
 export const Route = createFileRoute("/owner")({
@@ -77,7 +77,7 @@ function OwnerShell() {
           <div className="mt-3 grid grid-cols-3 gap-1 text-center">
             <div className="rounded-lg bg-background p-2">
               <div className="text-sm font-extrabold">{ownedLots.length || 1}</div>
-              <div className="text-[9px] uppercase tracking-wider text-muted-foreground">Lots</div>
+              <div className="text-[9px] uppercase tracking-wider text-muted-foreground">Parkinglar</div>
             </div>
             <div className="rounded-lg bg-background p-2">
               <div className="text-sm font-extrabold">{totalSpaces}</div>

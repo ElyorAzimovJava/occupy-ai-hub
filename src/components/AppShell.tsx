@@ -92,7 +92,7 @@ export function AppShell({
               to="/"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs text-sidebar-foreground/70 hover:bg-sidebar-accent/60"
             >
-              ← Back to website
+              ← Saytga qaytish
             </Link>
           </div>
         </aside>
@@ -101,7 +101,7 @@ export function AppShell({
           <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-xl sm:px-6">
             <div className="relative hidden flex-1 max-w-md sm:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search lots, drivers, bookings…" className="pl-9" />
+              <Input placeholder="Parking, haydovchi, bron qidirish…" className="pl-9" />
               <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground sm:inline">
                 ⌘K
               </kbd>
@@ -133,7 +133,7 @@ export function AppShell({
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className={userExtras ? "w-80" : "w-56"}>
-                  <DropdownMenuLabel>Signed in as {user.name}</DropdownMenuLabel>
+                  <DropdownMenuLabel>Tizimda: {user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {userExtras && (
                     <>
@@ -141,9 +141,9 @@ export function AppShell({
                       <DropdownMenuSeparator />
                     </>
                   )}
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Profil</DropdownMenuItem>
+                  <DropdownMenuItem>Sozlamalar</DropdownMenuItem>
+                  <DropdownMenuItem>To'lovlar</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={(e) => {
@@ -152,7 +152,7 @@ export function AppShell({
                       window.location.href = "/";
                     }}
                   >
-                    Sign out
+                    Chiqish
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/owner/history")({
-  head: () => ({ meta: [{ title: "History - Owner" }] }),
+  head: () => ({ meta: [{ title: "Tarix - Egasi" }] }),
   component: () => (
     <div>
       <PageHeader title="Operating history" subtitle="Occupancy, revenue, reservations and AI logs." actions={<Button size="sm" variant="outline"><Download className="mr-1 h-4 w-4"/>Export</Button>} />

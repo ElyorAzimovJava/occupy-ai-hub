@@ -6,7 +6,7 @@ import { Camera as CameraIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/owner/live")({
-  head: () => ({ meta: [{ title: "Live Monitoring - Owner" }] }),
+  head: () => ({ meta: [{ title: "Jonli monitoring - Egasi" }] }),
   component: LivePage,
 });
 

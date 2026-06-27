@@ -191,9 +191,9 @@ export const peakHours = [
 ];
 
 export const activityFeed = [
-  { id: 1, who: "Camera 02", what: "detected new vehicle at A3", when: "just now", tone: "info" as const },
-  { id: 2, who: "Madina S.", what: "extended booking by 30 min", when: "1m ago", tone: "success" as const },
-  { id: 3, who: "Compass Mall", what: "Zone C camera went offline", when: "3m ago", tone: "danger" as const },
-  { id: 4, who: "Bobur Y.", what: "added new parking lot", when: "12m ago", tone: "info" as const },
-  { id: 5, who: "AI Vision", what: "97.2% accuracy this hour", when: "20m ago", tone: "success" as const },
+  { id: 1, who: "Kamera 02", what: "A3 da yangi avtomobilni aniqladi", when: "hozir", tone: "info" as const },
+  { id: 2, who: "Madina S.", what: "bronini 30 daqiqaga uzaytirdi", when: "1 daq oldin", tone: "success" as const },
+  { id: 3, who: "Compass Mall", what: "C zonasi kamerasi oʻchdi", when: "3 daq oldin", tone: "danger" as const },
+  { id: 4, who: "Bobur Y.", what: "yangi parking qoʻshdi", when: "12 daq oldin", tone: "info" as const },
+  { id: 5, who: "AI Vision", what: "shu soatda 97.2% aniqlik", when: "20 daq oldin", tone: "success" as const },
 ];
