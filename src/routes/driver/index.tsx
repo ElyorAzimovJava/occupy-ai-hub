@@ -7,7 +7,7 @@ import { useGeolocation } from "@/lib/useGeolocation";
 import { useDriverPrefs } from "@/lib/useDriverPrefs";
 
 export const Route = createFileRoute("/driver/")({
-  head: () => ({ meta: [{ title: "Home - Driver" }] }),
+  head: () => ({ meta: [{ title: "Bosh sahifa - Haydovchi" }] }),
   component: DriverHome,
 });
 
