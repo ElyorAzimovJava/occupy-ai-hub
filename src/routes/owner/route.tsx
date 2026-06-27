@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { bookingStore } from "@/lib/bookingStore";
 import { useNavigate } from "@tanstack/react-router";
+import { useCurrentOwner } from "@/lib/session";
 
 const nav: NavItem[] = [
   { label: "Dashboard", to: "/owner", icon: LayoutDashboard },
@@ -21,8 +22,10 @@ export const Route = createFileRoute("/owner")({
 
 function OwnerShell() {
   const navigate = useNavigate();
+  const owner = useCurrentOwner();
   useEffect(() => {
     return bookingStore.onCreate((b) => {
+      if (b.lotId !== owner.lotId) return;
       toast(`🚗 Yangi bron: ${b.driverName}`, {
         description: `${b.lotName} · ${b.vehicle} (${b.plate}) — kelishi kutilmoqda`,
         duration: 8000,
@@ -37,7 +40,7 @@ function OwnerShell() {
         }
       } catch {}
     });
-  }, [navigate]);
+  }, [navigate, owner.lotId]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
@@ -46,7 +49,7 @@ function OwnerShell() {
   }, []);
 
   return (
-    <AppShell brand="OsonParking" brandRole="Owner Console" nav={nav} user={{ name: "Madina Rakhimova", email: "madina@tashkentcity.uz", avatar: "MR" }}>
+    <AppShell brand="OsonParking" brandRole={owner.company} nav={nav} user={{ name: owner.name, email: owner.email, avatar: owner.initials }}>
       <Outlet />
     </AppShell>
   );
