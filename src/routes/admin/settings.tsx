@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/admin/settings")({
-  head: () => ({ meta: [{ title: "Settings - Admin" }] }),
+  head: () => ({ meta: [{ title: "Sozlamalar - Admin" }] }),
   component: () => (
     <div>
       <PageHeader title="Platform settings" subtitle="Branding, billing, and AI policies." />

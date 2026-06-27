@@ -3,7 +3,7 @@ import { PageHeader, Badged } from "@/components/AppShell";
 import { Bell, AlertTriangle, CheckCircle2, Info } from "lucide-react";
 
 export const Route = createFileRoute("/admin/notifications")({
-  head: () => ({ meta: [{ title: "Notifications - Admin" }] }),
+  head: () => ({ meta: [{ title: "Bildirishnomalar - Admin" }] }),
   component: () => {
     const items = [
       { i: AlertTriangle, t: "Compass Mall - Zone C camera offline", s: "3m ago", tone: "danger" as const },

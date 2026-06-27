@@ -14,7 +14,7 @@ import { mockLots } from "@/lib/mockData";
 import { spotStore } from "@/lib/spotStore";
 
 export const Route = createFileRoute("/owner/bookings")({
-  head: () => ({ meta: [{ title: "Bookings - Owner" }] }),
+  head: () => ({ meta: [{ title: "Bronlar - Egasi" }] }),
   component: OwnerBookings,
 });
 

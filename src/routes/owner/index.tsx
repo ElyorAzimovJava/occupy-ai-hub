@@ -9,7 +9,7 @@ import { useBookings } from "@/lib/bookingStore";
 import { Hourglass } from "lucide-react";
 
 export const Route = createFileRoute("/owner/")({
-  head: () => ({ meta: [{ title: "Dashboard - Owner" }] }),
+  head: () => ({ meta: [{ title: "Boshqaruv paneli - Egasi" }] }),
   component: OwnerDashboard,
 });
 

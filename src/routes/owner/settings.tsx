@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/owner/settings")({
-  head: () => ({ meta: [{ title: "Settings - Owner" }] }),
+  head: () => ({ meta: [{ title: "Sozlamalar - Egasi" }] }),
   component: () => (
     <div>
       <PageHeader title="Lot settings" subtitle="Pricing, hours, staff, and notifications." />

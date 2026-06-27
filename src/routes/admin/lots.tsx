@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/admin/lots")({
-  head: () => ({ meta: [{ title: "Parking Lots - Admin" }] }),
+  head: () => ({ meta: [{ title: "Parkinglar - Admin" }] }),
   component: () => (
     <div>
       <PageHeader title="Parking lots" subtitle="All lots across every operator." actions={<Button size="sm"><Plus className="mr-1 h-4 w-4" /> Add Lot</Button>} />

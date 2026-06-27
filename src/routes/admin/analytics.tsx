@@ -6,7 +6,7 @@ import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, LineChart, Line, C
 import { Download, FileSpreadsheet } from "lucide-react";
 
 export const Route = createFileRoute("/admin/analytics")({
-  head: () => ({ meta: [{ title: "Analytics - Admin" }] }),
+  head: () => ({ meta: [{ title: "Tahlillar - Admin" }] }),
   component: AnalyticsPage,
 });
 

@@ -8,7 +8,7 @@ import { Plus, Trash2, Move, Brush } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/owner/editor")({
-  head: () => ({ meta: [{ title: "Space Editor - Owner" }] }),
+  head: () => ({ meta: [{ title: "Joylar muharriri - Egasi" }] }),
   component: EditorPage,
 });
 

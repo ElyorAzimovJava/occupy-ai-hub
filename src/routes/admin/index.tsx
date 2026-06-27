@@ -6,7 +6,7 @@ import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, CartesianGrid, XAx
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin/")({
-  head: () => ({ meta: [{ title: "Dashboard - Admin - OsonParking" }] }),
+  head: () => ({ meta: [{ title: "Boshqaruv paneli - Admin - OsonParking" }] }),
   component: AdminDashboard,
 });
 
