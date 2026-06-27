@@ -9,17 +9,18 @@ import {
   Phone, CircleParking, Wallet, Sparkles, ChevronRight,
 } from "lucide-react";
 import { SpotPicker } from "@/components/SpotPicker";
+import { useCurrentOwner } from "@/lib/session";
+import { mockLots } from "@/lib/mockData";
 
 export const Route = createFileRoute("/owner/bookings")({
   head: () => ({ meta: [{ title: "Bookings - Owner" }] }),
   component: OwnerBookings,
 });
 
-const DEFAULT_LOT_ID = "lot-1";
-const DEFAULT_LOT_NAME = "Mening parkingim";
-
 function OwnerBookings() {
-  const driverBookings = useBookings();
+  const owner = useCurrentOwner();
+  const lot = mockLots.find((l) => l.id === owner.lotId) ?? mockLots[0];
+  const driverBookings = useBookings().filter((b) => b.lotId === owner.lotId);
   const [now, setNow] = useState(() => Date.now());
   const [walkInOpen, setWalkInOpen] = useState(false);
   useEffect(() => {
@@ -49,7 +50,7 @@ function OwnerBookings() {
         </Button>
       </div>
 
-      {walkInOpen && <WalkInDialog onClose={() => setWalkInOpen(false)} />}
+      {walkInOpen && <WalkInDialog onClose={() => setWalkInOpen(false)} lotId={owner.lotId} lotName={lot.name} lotAddress={lot.address} />}
 
       {/* Pending */}
       <section className="mb-6">
@@ -316,7 +317,7 @@ function KpiChip({ tone, icon: Icon, label, value }: { tone: "amber" | "emerald"
    Walk-in dialog
    ============================================================ */
 
-function WalkInDialog({ onClose }: { onClose: () => void }) {
+function WalkInDialog({ onClose, lotId, lotName, lotAddress }: { onClose: () => void; lotId: string; lotName: string; lotAddress: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [plate, setPlate] = useState("");
@@ -332,9 +333,9 @@ function WalkInDialog({ onClose }: { onClose: () => void }) {
     if (!valid) { toast.error("Ism, davlat raqami va joy kerak"); return; }
     const initials = name.trim().split(/\s+/).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
     bookingStore.addWalkIn({
-      lotId: DEFAULT_LOT_ID,
-      lotName: DEFAULT_LOT_NAME,
-      lotAddress: "—",
+      lotId,
+      lotName,
+      lotAddress,
       spot: spot.toUpperCase(),
       level,
       driverName: name.trim(),
@@ -425,8 +426,8 @@ function WalkInDialog({ onClose }: { onClose: () => void }) {
       {pickerOpen && (
         <SpotPicker
           open
-          lotId={DEFAULT_LOT_ID}
-          lotName={DEFAULT_LOT_NAME}
+          lotId={lotId}
+          lotName={lotName}
           level={level}
           onClose={() => setPickerOpen(false)}
           onConfirm={(s, lv) => { setSpot(s); setLevel(lv); setPickerOpen(false); }}

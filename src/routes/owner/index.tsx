@@ -2,8 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader, StatCard, Badged, StatusDot } from "@/components/AppShell";
 import { ParkingSquare, CheckSquare, CalendarClock, DollarSign, TrendingUp, Ticket } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-import { occupancySeries, mockBookings } from "@/lib/mockData";
+import { occupancySeries, mockLots } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
+import { useCurrentOwner } from "@/lib/session";
+import { useBookings } from "@/lib/bookingStore";
+import { Hourglass } from "lucide-react";
 
 export const Route = createFileRoute("/owner/")({
   head: () => ({ meta: [{ title: "Dashboard - Owner" }] }),
@@ -13,16 +16,21 @@ export const Route = createFileRoute("/owner/")({
 const ctip = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 } as const;
 
 function OwnerDashboard() {
+  const owner = useCurrentOwner();
+  const lot = mockLots.find((l) => l.id === owner.lotId) ?? mockLots[0];
+  const all = useBookings().filter((b) => b.lotId === owner.lotId);
+  const free = Math.max(0, lot.total - lot.occupied - lot.reserved);
+  const live = all.filter((b) => b.status === "active" || b.status === "pending").slice(0, 6);
   return (
     <div>
-      <PageHeader title="Tashkent City Mall" subtitle="3 floors - 420 spaces - AI vision live" actions={<Button size="sm">New booking</Button>} />
+      <PageHeader title={lot.name} subtitle={`${lot.address} · ${lot.total} spaces · AI vision live`} actions={<Button size="sm">New booking</Button>} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <StatCard label="Total Spaces" value="420" icon={ParkingSquare} />
-        <StatCard label="Occupied" value="284" delta="68%" icon={ParkingSquare} tone="warning" />
-        <StatCard label="Reserved" value="42" icon={CalendarClock} />
-        <StatCard label="Available" value="94" delta="22%" icon={CheckSquare} tone="success" />
-        <StatCard label="Today" value="$1,840" icon={DollarSign} tone="success" />
-        <StatCard label="This month" value="$48.2k" delta="+12% MoM" icon={TrendingUp} tone="success" />
+        <StatCard label="Total Spaces" value={String(lot.total)} icon={ParkingSquare} />
+        <StatCard label="Occupied" value={String(lot.occupied)} delta={`${Math.round(lot.occupied / lot.total * 100)}%`} icon={ParkingSquare} tone="warning" />
+        <StatCard label="Reserved" value={String(lot.reserved)} icon={CalendarClock} />
+        <StatCard label="Available" value={String(free)} delta={`${Math.round(free / lot.total * 100)}%`} icon={CheckSquare} tone="success" />
+        <StatCard label="Pending" value={String(all.filter((b) => b.status === "pending").length)} icon={Hourglass} tone="warning" />
+        <StatCard label="This month" value={`$${(lot.revenue/1000).toFixed(1)}k`} delta="+12% MoM" icon={TrendingUp} tone="success" />
       </div>
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5 lg:col-span-2">
@@ -43,11 +51,16 @@ function OwnerDashboard() {
         <div className="rounded-2xl border border-border bg-card p-5">
           <h3 className="text-sm font-semibold">Live bookings</h3>
           <div className="mt-3 space-y-2">
-            {mockBookings.slice(0, 5).map((b) => (
+            {live.length === 0 && (
+              <div className="rounded-xl border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
+                Hozircha faol bron yo'q
+              </div>
+            )}
+            {live.map((b) => (
               <div key={b.id} className="flex items-center gap-3 rounded-xl border border-border p-3">
                 <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary"><Ticket className="h-4 w-4"/></div>
-                <div className="min-w-0 flex-1"><div className="truncate text-sm font-semibold">{b.driver}</div><div className="text-xs text-muted-foreground">{b.plate} - Slot {b.space}</div></div>
-                <Badged tone={b.status==="active"?"success":b.status==="pending"?"warning":b.status==="completed"?"info":"danger"}><span className="mr-1"><StatusDot status={b.status==="active"?"online":b.status==="pending"?"warning":"offline"}/></span>{b.status}</Badged>
+                <div className="min-w-0 flex-1"><div className="truncate text-sm font-semibold">{b.driverName}</div><div className="text-xs text-muted-foreground">{b.plate} · {b.spot || "—"}</div></div>
+                <Badged tone={b.status==="active"?"success":"warning"}><span className="mr-1"><StatusDot status={b.status==="active"?"online":"warning"}/></span>{b.status}</Badged>
               </div>
             ))}
           </div>

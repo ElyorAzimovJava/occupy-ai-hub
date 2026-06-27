@@ -4,6 +4,8 @@ import {
   Car, Bookmark, CreditCard, Bell, HelpCircle, Settings, LogOut, Shield, FileText,
 } from "lucide-react";
 import { useState } from "react";
+import { useCurrentDriver, session } from "@/lib/session";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/driver")({
   component: DriverShell,
@@ -19,17 +21,19 @@ const items = [
 function DriverShell() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [menuOpen, setMenuOpen] = useState(false);
+  const driver = useCurrentDriver();
+  const navigate = useNavigate();
   return (
     <div className="min-h-svh bg-[#F4F6FB] pb-28 text-slate-900">
       <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200/80 bg-[#F4F6FB]/90 px-5 py-4 backdrop-blur">
         <button aria-label="Menu" onClick={() => setMenuOpen(true)} className="text-[#1D4ED8]"><Menu className="h-6 w-6"/></button>
         <div className="text-lg font-extrabold tracking-wide text-[#1D4ED8]">OSON PARKING</div>
-        <div className="h-9 w-9 overflow-hidden rounded-full bg-slate-200 ring-2 ring-white">
-          <img alt="" src="https://i.pravatar.cc/64?img=12" className="h-full w-full object-cover"/>
+        <div className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] text-[11px] font-bold text-white ring-2 ring-white">
+          {driver.initials}
         </div>
       </header>
       <main className="mx-auto max-w-md px-5 py-5"><Outlet/></main>
-      <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} driverName={driver.name} driverEmail={driver.email} driverInitials={driver.initials} onSignOut={() => { session.signOut(); navigate({ to: "/auth" }); }} />
       <nav className="fixed inset-x-0 bottom-3 z-40 mx-auto max-w-md px-3">
         <div className="grid grid-cols-4 rounded-2xl border border-slate-200 bg-white/95 px-2 py-2 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.18)] backdrop-blur">
           {items.map((it) => {
@@ -82,7 +86,7 @@ const menuSections: { title: string; items: { to: string; label: string; icon: a
   },
 ];
 
-function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+function SideMenu({ open, onClose, driverName, driverEmail, driverInitials, onSignOut }: { open: boolean; onClose: () => void; driverName: string; driverEmail: string; driverInitials: string; onSignOut: () => void }) {
   return (
     <>
       <div
@@ -94,12 +98,12 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       >
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 overflow-hidden rounded-full ring-2 ring-blue-100">
-              <img alt="" src="https://i.pravatar.cc/64?img=12" className="h-full w-full object-cover" />
+            <div className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] text-xs font-bold text-white ring-2 ring-blue-100">
+              {driverInitials}
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">Azizbek Karimov</div>
-              <div className="text-[11px] text-slate-500">azizbek@oson.uz</div>
+              <div className="text-sm font-bold text-slate-900">{driverName}</div>
+              <div className="text-[11px] text-slate-500">{driverEmail}</div>
             </div>
           </div>
           <button onClick={onClose} aria-label="Yopish" className="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-500">
@@ -134,13 +138,12 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         </div>
 
         <div className="border-t border-slate-100 p-3">
-          <Link
-            to="/auth"
-            onClick={onClose}
-            className="flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-100"
+          <button
+            onClick={() => { onClose(); onSignOut(); }}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-100"
           >
             <LogOut className="h-4 w-4" /> Chiqish
-          </Link>
+          </button>
           <div className="mt-2 text-center text-[10px] text-slate-400">Oson Parking • v1.0.0</div>
         </div>
       </aside>
