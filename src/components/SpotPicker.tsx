@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { X, MapPin, Check, Car, Ban, Clock, CircleParking } from "lucide-react";
+import { useOccupiedSpots } from "@/lib/spotStore";
 
 type SpotStatus = "available" | "occupied" | "reserved" | "disabled";
 type Spot = { id: string; label: string; status: SpotStatus; section: string; row: number; col: number };
@@ -61,7 +62,11 @@ export function SpotPicker({
   const [level, setLevel] = useState(initialLevel || "P1");
   const [selected, setSelected] = useState<string | null>(null);
 
-  const layout = useMemo(() => buildLayout(lotId, level), [lotId, level]);
+  const dynOccupied = useOccupiedSpots(lotId, level);
+  const layout = useMemo(() => {
+    const base = buildLayout(lotId, level);
+    return base.map((s) => (dynOccupied.has(s.label) ? { ...s, status: "occupied" as SpotStatus } : s));
+  }, [lotId, level, dynOccupied]);
   const stats = useMemo(() => {
     const a = layout.filter((s) => s.status === "available").length;
     const o = layout.filter((s) => s.status === "occupied").length;
