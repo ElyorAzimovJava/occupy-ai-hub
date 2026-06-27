@@ -56,6 +56,14 @@ export const OWNER_ACCOUNTS: OwnerAccount[] = [
   { role: "owner", email: "zarina@atlas.uz",        password: "owner123", ownerId: "o-10", lotId: "lot-12", name: "Zarina Ismoilova",        company: "Atlas Group",             initials: "ZI" },
   { role: "owner", email: "rustam@gulistonbz.uz",   password: "owner123", ownerId: "o-11", lotId: "lot-13", name: "Rustam Mamadaliyev",      company: "Guliston Bazaar Holdings", initials: "RM" },
   { role: "owner", email: "feruza@sirdaryoplaza.uz",password: "owner123", ownerId: "o-12", lotId: "lot-14", name: "Feruza Norqulova",        company: "Sirdaryo Plaza LLC",      initials: "FN" },
+  { role: "owner", email: "jamshid@chorsu.uz",      password: "owner123", ownerId: "o-8",  lotId: "lot-7",  name: "Jamshid Olimov",          company: "Chorsu Trade LLC",        initials: "JO" },
+  { role: "owner", email: "iroda@sergeli.uz",       password: "owner123", ownerId: "o-17", lotId: "lot-9",  name: "Iroda Yusupova",          company: "Sergeli Trade Group",     initials: "IY" },
+  { role: "owner", email: "sardor@oybek.uz",        password: "owner123", ownerId: "o-18", lotId: "lot-10", name: "Sardor Aliev",            company: "Oybek Metro Holdings",    initials: "SA" },
+  { role: "owner", email: "bobur@silk.uz",          password: "owner123", ownerId: "o-3",  lotId: "lot-11", name: "Bobur Yusupov",           company: "Silk Parking Co.",        initials: "BY" },
+  { role: "owner", email: "akmal@hokservice.uz",    password: "owner123", ownerId: "o-13", lotId: "lot-15", name: "Akmal Hasanov",           company: "Hokimiyat Service",       initials: "AH" },
+  { role: "owner", email: "shahnoza@vokzalpark.uz", password: "owner123", ownerId: "o-14", lotId: "lot-16", name: "Shahnoza Egamberdiyeva",  company: "Vokzal Park Co.",         initials: "SE" },
+  { role: "owner", email: "davron@mdiu.uz",         password: "owner123", ownerId: "o-15", lotId: "lot-17", name: "Davron Yo'ldoshev",       company: "MDIU Campus Services",    initials: "DY" },
+  { role: "owner", email: "bahodir@sportsirdaryo.uz",password:"owner123", ownerId: "o-16", lotId: "lot-18", name: "Bahodir Tolipov",         company: "Sirdaryo Sport Group",    initials: "BT" },
 ];
 
 // ===== Driver accounts =====
