@@ -9,6 +9,7 @@ import { useRealtimeLots } from "@/lib/useRealtimeLots";
 import { useGeolocation } from "@/lib/useGeolocation";
 import { formatUzs, USD_TO_UZS } from "@/lib/aiRecommend";
 import { formatDistance } from "@/components/ParkingMap";
+import { bookingStore } from "@/lib/bookingStore";
 
 type SearchParams = { lot?: string };
 
@@ -74,6 +75,7 @@ function BookingFlow() {
   const [paymentId, setPaymentId] = useState(PAYMENTS[0].id);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [createdId, setCreatedId] = useState<string | null>(null);
 
   const vehicle = VEHICLES.find((v) => v.id === vehicleId)!;
   const payment = PAYMENTS.find((p) => p.id === paymentId)!;
@@ -82,6 +84,20 @@ function BookingFlow() {
     if (isFull || submitting) return;
     setSubmitting(true);
     setTimeout(() => {
+      const booking = bookingStore.create({
+        lotId: lot.id,
+        lotName: lot.name,
+        lotAddress: lot.address,
+        spot: `A-${Math.floor(Math.random() * 30) + 1}`,
+        level: "P2",
+        driverName: DRIVER.name,
+        driverPhone: DRIVER.phone,
+        driverInitials: DRIVER.initials,
+        vehicle: vehicle.name,
+        plate: vehicle.plate,
+        rateUzs: hourlyUzs,
+      });
+      setCreatedId(booking.id);
       setSubmitting(false);
       setDone(true);
     }, 1100);
@@ -90,6 +106,7 @@ function BookingFlow() {
   if (done) {
     return (
       <SuccessScreen
+        bookingId={createdId ?? "OSP-000000"}
         lotName={lot.name}
         plate={vehicle.plate}
         totalUzs={totalUzs}
@@ -343,27 +360,30 @@ function Row({ k, v }: { k: string; v: string }) {
 }
 
 function SuccessScreen({
+  bookingId,
   lotName,
   plate,
   totalUzs,
   onContinue,
 }: {
+  bookingId: string;
   lotName: string;
   plate: string;
   totalUzs: number;
   onContinue: () => void;
 }) {
-  const bookingId = useMemo(() => "OSP-" + Math.floor(100000 + Math.random() * 900000), []);
   return (
     <div className="flex flex-col items-center pt-6 animate-fade-in">
       <div className="relative">
         <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400/30" />
-        <div className="relative grid h-20 w-20 place-items-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-200">
-          <CheckCircle2 className="h-10 w-10" />
+        <div className="relative grid h-20 w-20 place-items-center rounded-full bg-amber-500 text-white shadow-lg shadow-amber-200">
+          <Clock className="h-10 w-10" />
         </div>
       </div>
-      <div className="mt-5 text-2xl font-extrabold text-slate-900">Bron tasdiqlandi!</div>
-      <div className="mt-1 text-sm text-slate-500">Avtomobilingiz uchun joy band qilindi</div>
+      <div className="mt-5 text-2xl font-extrabold text-slate-900">Bron yuborildi</div>
+      <div className="mt-1 text-center text-sm text-slate-500 px-4">
+        Parking xodimi sizning kelganingizni tasdiqlagach,<br/>vaqt va to'lov hisoblanishi boshlanadi.
+      </div>
 
       <div className="mt-6 w-full rounded-3xl bg-white p-5 shadow-lg ring-1 ring-slate-200">
         <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-slate-500">
@@ -375,11 +395,13 @@ function SuccessScreen({
         <div className="h-2" />
         <Row k="Avtomobil" v={plate} />
         <div className="h-2" />
-        <Row k="To'langan" v={formatUzs(totalUzs)} />
+        <Row k="Boshlang'ich" v={formatUzs(totalUzs)} />
+        <div className="h-2" />
+        <Row k="Holat" v="⏳ Tasdiqlanmoqda" />
         <div className="my-3 border-t border-dashed border-slate-200" />
         <div className="flex items-center gap-2 text-xs text-slate-500">
-          <Clock className="h-4 w-4 text-[#1D4ED8]" />
-          Joy 15 daqiqa davomida saqlanadi
+          <ShieldCheck className="h-4 w-4 text-[#1D4ED8]" />
+          Charge faqat tasdiqlangandan keyin boshlanadi
         </div>
       </div>
 

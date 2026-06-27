@@ -107,5 +107,6 @@ export function aiRecommend(lots: ParkingLot[], origin: { lat: number; lng: numb
 }
 
 export function formatUzs(n: number) {
-  return `${n.toLocaleString("uz-UZ")} UZS`;
+  const s = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `${s} so'm`;
 }

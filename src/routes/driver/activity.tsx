@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Car, Clock, MapPin, Navigation, XCircle, Plus, Sparkles,
-  TrendingUp, TrendingDown, Calendar, Receipt, CheckCircle2, AlertCircle, Timer,
+  TrendingUp, TrendingDown, Calendar, Receipt, CheckCircle2, AlertCircle, Timer, Hourglass,
 } from "lucide-react";
 import {
   ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip,
   AreaChart, Area,
 } from "recharts";
+import { useBookings, bookingStore, formatUzsPlain } from "@/lib/bookingStore";
 
 export const Route = createFileRoute("/driver/activity")({
   head: () => ({ meta: [{ title: "Faoliyat - Driver" }] }),
@@ -15,19 +16,6 @@ export const Route = createFileRoute("/driver/activity")({
 });
 
 const HOURLY_RATE_UZS = 15000;
-
-// Active session — started 1h 42m ago
-const activeSession = {
-  id: "BK-2026-0042",
-  lot: "Plaza Central",
-  address: "Amir Temur 108, Toshkent",
-  spot: "B-12",
-  level: "P2",
-  startedAt: Date.now() - (1 * 60 + 42) * 60 * 1000,
-  rateUzs: HOURLY_RATE_UZS,
-  vehicle: "Chevrolet Cobalt",
-  plate: "01 A 777 BC",
-};
 
 type HistoryItem = {
   id: string;
@@ -56,7 +44,7 @@ const history: HistoryItem[] = [
   { id: "BK-0030", lot: "Compass Mall Lot",    address: "Mustaqillik 14",   date: "2026-05-22", start: "11:00", end: "13:30", durationMin: 150, amountUzs: 37500, status: "completed" },
 ];
 
-function fmtUzs(n: number) { return `${n.toLocaleString("uz-UZ")} so'm`; }
+function fmtUzs(n: number) { return `${formatUzsPlain(n)} so'm`; }
 function pad(n: number) { return String(n).padStart(2, "0"); }
 
 function Activity() {
@@ -66,13 +54,11 @@ function Activity() {
     return () => clearInterval(t);
   }, []);
 
-  const elapsedMs = now - activeSession.startedAt;
-  const elapsedSec = Math.max(0, Math.floor(elapsedMs / 1000));
-  const h = Math.floor(elapsedSec / 3600);
-  const m = Math.floor((elapsedSec % 3600) / 60);
-  const s = elapsedSec % 60;
-  const hoursDecimal = elapsedSec / 3600;
-  const currentCost = Math.round(hoursDecimal * activeSession.rateUzs);
+  const bookings = useBookings();
+  const liveBooking = useMemo(
+    () => bookings.find((b) => b.status === "active") || bookings.find((b) => b.status === "pending") || null,
+    [bookings],
+  );
 
   // Aggregations
   const stats = useMemo(() => {
@@ -119,63 +105,12 @@ function Activity() {
 
   return (
     <div className="space-y-5 animate-fade-in pb-4">
-      {/* ===== Active session ===== */}
-      <section>
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-wider text-[#1D4ED8]">Faol sessiya</div>
-            <h1 className="text-2xl font-extrabold text-slate-900">{activeSession.lot}</h1>
-            <div className="mt-0.5 flex items-center gap-1 text-[12px] text-slate-500">
-              <MapPin className="h-3.5 w-3.5" />{activeSession.address}
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />LIVE
-          </div>
-        </div>
-
-        {/* Timer + cost card */}
-        <div className="mt-3 rounded-2xl bg-[#1D4ED8] p-5 text-white shadow-lg shadow-blue-500/30">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider opacity-80">Davom etayotgan vaqt</div>
-              <div className="mt-1 text-5xl font-extrabold tabular-nums tracking-tight">
-                {pad(h)}:{pad(m)}:{pad(s)}
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-[11px] font-bold uppercase tracking-wider opacity-80">Hozirgi xarajat</div>
-              <div className="mt-1 text-2xl font-extrabold tabular-nums">{currentCost.toLocaleString("uz-UZ")}</div>
-              <div className="text-[11px] opacity-80">so'm</div>
-            </div>
-          </div>
-          <div className="mt-4 grid grid-cols-3 gap-2 text-[11px]">
-            <Mini label="Spot" value={activeSession.spot} />
-            <Mini label="Level" value={activeSession.level} />
-            <Mini label="Soatlik" value={`${(activeSession.rateUzs/1000)}k`} />
-          </div>
-        </div>
-
-        {/* Vehicle */}
-        <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-slate-200">
-          <div className="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-[#1D4ED8]"><Car className="h-5 w-5" /></div>
-          <div className="flex-1">
-            <div className="text-sm font-bold text-slate-900">{activeSession.vehicle}</div>
-            <div className="text-[12px] text-slate-500">{activeSession.plate}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Bron</div>
-            <div className="text-[12px] font-semibold text-slate-700">{activeSession.id}</div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          <ActionBtn icon={Plus} label="Uzaytirish" />
-          <ActionBtn icon={Navigation} label="Yo'l" />
-          <ActionBtn icon={XCircle} label="Tugatish" tone="danger" />
-        </div>
-      </section>
+      {/* ===== Live booking section ===== */}
+      {liveBooking ? (
+        <LiveBookingCard booking={liveBooking} now={now} />
+      ) : (
+        <EmptyLiveCard />
+      )}
 
       {/* ===== AI Analytics ===== */}
       <section className="rounded-2xl bg-white p-5 ring-1 ring-slate-200 shadow-sm">
@@ -287,6 +222,136 @@ function Activity() {
   );
 }
 
+function LiveBookingCard({ booking, now }: { booking: import("@/lib/bookingStore").DriverBooking; now: number }) {
+  const isPending = booking.status === "pending";
+  const startedAt = booking.confirmedAt ?? now;
+  const elapsedSec = isPending ? 0 : Math.max(0, Math.floor((now - startedAt) / 1000));
+  const h = Math.floor(elapsedSec / 3600);
+  const m = Math.floor((elapsedSec % 3600) / 60);
+  const s = elapsedSec % 60;
+  const currentCost = Math.round((elapsedSec / 3600) * booking.rateUzs);
+  const waitSec = isPending ? Math.max(0, Math.floor((now - booking.createdAt) / 1000)) : 0;
+  const wh = Math.floor(waitSec / 60);
+  const ws = waitSec % 60;
+
+  return (
+    <section>
+      <div className="flex items-start justify-between">
+        <div>
+          <div className={`text-[11px] font-bold uppercase tracking-wider ${isPending ? "text-amber-600" : "text-[#1D4ED8]"}`}>
+            {isPending ? "Tasdiqlash kutilmoqda" : "Faol sessiya"}
+          </div>
+          <h1 className="text-2xl font-extrabold text-slate-900">{booking.lotName}</h1>
+          <div className="mt-0.5 flex items-center gap-1 text-[12px] text-slate-500">
+            <MapPin className="h-3.5 w-3.5" />{booking.lotAddress}
+          </div>
+        </div>
+        <div className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ${
+          isPending ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"
+        }`}>
+          <span className={`h-1.5 w-1.5 animate-pulse rounded-full ${isPending ? "bg-amber-500" : "bg-emerald-500"}`} />
+          {isPending ? "PENDING" : "LIVE"}
+        </div>
+      </div>
+
+      {isPending ? (
+        <div className="mt-3 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 p-5 text-white shadow-lg shadow-amber-500/30">
+          <div className="flex items-center gap-3">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-white/20 backdrop-blur">
+              <Hourglass className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <div className="text-[11px] font-bold uppercase tracking-wider opacity-90">Parking xodimi tasdiqlashi kerak</div>
+              <div className="text-lg font-extrabold leading-tight">Bron yuborildi — kelganingizda tasdiqlanadi</div>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
+            <div className="rounded-lg bg-white/15 px-3 py-2 backdrop-blur">
+              <div className="text-[9px] font-bold uppercase tracking-wider opacity-80">Kutish vaqti</div>
+              <div className="mt-0.5 text-base font-extrabold tabular-nums">{pad(wh)}:{pad(ws)}</div>
+            </div>
+            <div className="rounded-lg bg-white/15 px-3 py-2 backdrop-blur">
+              <div className="text-[9px] font-bold uppercase tracking-wider opacity-80">Hisob</div>
+              <div className="mt-0.5 text-base font-extrabold">0 so'm</div>
+            </div>
+          </div>
+          <div className="mt-3 rounded-lg bg-white/10 p-2.5 text-[11px] leading-relaxed backdrop-blur">
+            <ShieldCheckIconInline /> To'lov hisoblanishi <b>parkingga yetib borib, xodim tasdiqlagandan keyin</b> boshlanadi.
+          </div>
+        </div>
+      ) : (
+        <div className="mt-3 rounded-2xl bg-[#1D4ED8] p-5 text-white shadow-lg shadow-blue-500/30">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-wider opacity-80">Davom etayotgan vaqt</div>
+              <div className="mt-1 text-5xl font-extrabold tabular-nums tracking-tight">
+                {pad(h)}:{pad(m)}:{pad(s)}
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] font-bold uppercase tracking-wider opacity-80">Hozirgi xarajat</div>
+              <div className="mt-1 text-2xl font-extrabold tabular-nums">{formatUzsPlain(currentCost)}</div>
+              <div className="text-[11px] opacity-80">so'm</div>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-2 text-[11px]">
+            <Mini label="Spot" value={booking.spot} />
+            <Mini label="Level" value={booking.level} />
+            <Mini label="Soatlik" value={`${booking.rateUzs/1000}k`} />
+          </div>
+        </div>
+      )}
+
+      <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-slate-200">
+        <div className="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-[#1D4ED8]"><Car className="h-5 w-5" /></div>
+        <div className="flex-1">
+          <div className="text-sm font-bold text-slate-900">{booking.vehicle}</div>
+          <div className="text-[12px] text-slate-500">{booking.plate}</div>
+        </div>
+        <div className="text-right">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Bron</div>
+          <div className="text-[12px] font-semibold text-slate-700">{booking.id}</div>
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {isPending ? (
+          <>
+            <ActionBtn icon={Navigation} label="Yo'l" />
+            <ActionBtn icon={Plus} label="Telefon" />
+            <ActionBtn icon={XCircle} label="Bekor qilish" tone="danger" onClick={() => bookingStore.cancel(booking.id)} />
+          </>
+        ) : (
+          <>
+            <ActionBtn icon={Plus} label="Uzaytirish" />
+            <ActionBtn icon={Navigation} label="Yo'l" />
+            <ActionBtn icon={XCircle} label="Tugatish" tone="danger" onClick={() => bookingStore.end(booking.id)} />
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ShieldCheckIconInline() {
+  return <CheckCircle2 className="-mt-0.5 mr-1 inline h-3.5 w-3.5" />;
+}
+
+function EmptyLiveCard() {
+  return (
+    <section className="rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6 text-center">
+      <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400">
+        <Car className="h-6 w-6" />
+      </div>
+      <div className="mt-3 text-base font-extrabold text-slate-900">Hozircha faol bron yo'q</div>
+      <div className="mt-1 text-xs text-slate-500">Bron qilganingizda u shu yerda paydo bo'ladi.</div>
+      <Link to="/driver/search" className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#1D4ED8] px-4 text-sm font-bold text-white">
+        Parking topish
+      </Link>
+    </section>
+  );
+}
+
 function Mini({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg bg-white/15 px-3 py-2 text-center backdrop-blur">
@@ -296,10 +361,10 @@ function Mini({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ActionBtn({ icon: Icon, label, tone }: { icon: any; label: string; tone?: "danger" }) {
+function ActionBtn({ icon: Icon, label, tone, onClick }: { icon: any; label: string; tone?: "danger"; onClick?: () => void }) {
   const danger = tone === "danger";
   return (
-    <button className={`flex flex-col items-center justify-center gap-1 rounded-2xl py-3.5 ring-1 transition ${danger ? "bg-rose-50 text-rose-600 ring-rose-100 hover:bg-rose-100" : "bg-blue-50/70 text-[#1D4ED8] ring-blue-100 hover:bg-blue-100/70"}`}>
+    <button onClick={onClick} className={`flex flex-col items-center justify-center gap-1 rounded-2xl py-3.5 ring-1 transition ${danger ? "bg-rose-50 text-rose-600 ring-rose-100 hover:bg-rose-100" : "bg-blue-50/70 text-[#1D4ED8] ring-blue-100 hover:bg-blue-100/70"}`}>
       <Icon className="h-5 w-5" />
       <span className="text-[11px] font-semibold">{label}</span>
     </button>
