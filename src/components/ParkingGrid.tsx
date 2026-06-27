@@ -7,6 +7,13 @@ const stateClass: Record<SlotStatus, string> = {
   disabled: "bg-slot-disabled/10 border-slot-disabled/30 text-slot-disabled opacity-50",
 };
 
+const statusLabel: Record<SlotStatus, string> = {
+  available: "Bo'sh",
+  occupied: "Band",
+  reserved: "Zahira",
+  disabled: "Yopiq",
+};
+
 export function ParkingGrid({
   slots,
   cols = 10,
@@ -46,7 +53,7 @@ export function SlotLegend() {
       {(["available", "occupied", "reserved", "disabled"] as SlotStatus[]).map((k) => (
         <div key={k} className="flex items-center gap-1.5">
           <span className={`h-2.5 w-2.5 rounded-sm border ${stateClass[k]}`} />
-          <span className="capitalize">{k}</span>
+          <span>{statusLabel[k]}</span>
         </div>
       ))}
     </div>
