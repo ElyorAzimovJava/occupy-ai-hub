@@ -9,17 +9,18 @@ import {
   Phone, CircleParking, Wallet, Sparkles, ChevronRight,
 } from "lucide-react";
 import { SpotPicker } from "@/components/SpotPicker";
+import { useCurrentOwner } from "@/lib/session";
+import { mockLots } from "@/lib/mockData";
 
 export const Route = createFileRoute("/owner/bookings")({
   head: () => ({ meta: [{ title: "Bookings - Owner" }] }),
   component: OwnerBookings,
 });
 
-const DEFAULT_LOT_ID = "lot-1";
-const DEFAULT_LOT_NAME = "Mening parkingim";
-
 function OwnerBookings() {
-  const driverBookings = useBookings();
+  const owner = useCurrentOwner();
+  const lot = mockLots.find((l) => l.id === owner.lotId) ?? mockLots[0];
+  const driverBookings = useBookings().filter((b) => b.lotId === owner.lotId);
   const [now, setNow] = useState(() => Date.now());
   const [walkInOpen, setWalkInOpen] = useState(false);
   useEffect(() => {
