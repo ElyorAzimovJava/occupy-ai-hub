@@ -1,20 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { ParkingGrid, SlotLegend } from "@/components/ParkingGrid";
-import { mockSlots, occupancySeries } from "@/lib/mockData";
 import {
-  Camera, Cpu, Eye, LineChart as LineChartIcon, MapPin, Shield, Sparkles, Zap,
-  Check, ArrowRight, CarFront, Activity,
+  ArrowRight, BadgeCheck, Camera, Activity, CalendarCheck,
+  CheckCircle2, Check, Globe, AtSign, Share2,
 } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import garageHero from "@/assets/garage-hero.jpg";
+import parkingHero from "@/assets/parking-hero.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OsonParking — Smart AI Parking Management Platform" },
-      { name: "description", content: "AI computer vision turns every camera into a live parking sensor. Manage lots, monitor occupancy, and book in seconds." },
-      { property: "og:title", content: "OsonParking — Smart AI Parking Management Platform" },
-      { property: "og:description", content: "AI computer vision turns every camera into a live parking sensor." },
+      { title: "Oson Parking — Aqlli to'xtash joylari boshqaruvi" },
+      { name: "description", content: "AI texnologiyalari yordamida vaqtingizni va mablag'ingizni tejang. O'zbekistondagi birinchi raqamli aqlli parking platformasi." },
+      { property: "og:title", content: "Oson Parking — Aqlli to'xtash joylari boshqaruvi" },
+      { property: "og:description", content: "O'zbekistondagi №1 aqlli parking platformasi" },
     ],
   }),
   component: LandingPage,
@@ -22,36 +20,33 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Nav /><Hero /><LogoStrip /><Features /><DashboardPreview /><HowItWorks /><Pricing /><Testimonials /><FAQ /><CTA /><Footer />
+    <div className="min-h-screen bg-[#F5F7FB] text-slate-900 font-[Inter,sans-serif]">
+      <Nav />
+      <Hero />
+      <Services />
+      <Experience />
+      <AboutPricing />
+      <Footer />
     </div>
   );
 }
 
 function Nav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/50 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary glow-primary">
-            <span className="text-sm font-black text-primary-foreground">O</span>
-          </div>
-          <div className="leading-tight">
-            <div className="text-sm font-bold tracking-tight">OsonParking</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">AI Vision</div>
-          </div>
-        </Link>
-        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
-          <a href="#features" className="hover:text-foreground">Features</a>
-          <a href="#how" className="hover:text-foreground">How it works</a>
-          <a href="#pricing" className="hover:text-foreground">Pricing</a>
-          <a href="#faq" className="hover:text-foreground">FAQ</a>
+    <header className="sticky top-0 z-40 bg-[#F5F7FB]/85 backdrop-blur-xl border-b border-slate-200/60">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
+        <Link to="/" className="text-xl font-bold text-[#1D4ED8] tracking-tight">Oson Parking</Link>
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-700">
+          <a href="#services" className="text-[#1D4ED8] border-b-2 border-[#1D4ED8] pb-1">Xizmatlar</a>
+          <a href="#about" className="hover:text-[#1D4ED8]">Biz haqimizda</a>
+          <a href="#pricing" className="hover:text-[#1D4ED8]">Narxlar</a>
+          <a href="#contact" className="hover:text-[#1D4ED8]">Aloqa</a>
         </nav>
-        <div className="flex items-center gap-2">
-          <Link to="/auth" className="hidden text-sm text-muted-foreground hover:text-foreground sm:inline">Sign in</Link>
-          <Button asChild size="sm" className="glow-primary">
-            <Link to="/auth">Start Free <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
-          </Button>
+        <div className="flex items-center gap-3">
+          <Link to="/auth" className="text-sm font-medium text-[#1D4ED8] hover:underline">Kirish</Link>
+          <Link to="/auth" className="rounded-lg bg-[#1D4ED8] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#1e40af] transition">
+            Ro'yxatdan o'tish
+          </Link>
         </div>
       </div>
     </header>
@@ -60,160 +55,28 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute right-0 top-40 h-[400px] w-[400px] rounded-full bg-accent/20 blur-3xl" />
-      </div>
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-2 lg:pb-32 lg:pt-24">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 px-3 py-1 text-xs text-muted-foreground">
-            <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" /><span className="relative inline-flex h-2 w-2 rounded-full bg-accent" /></span>
-            Live AI computer vision · 50ms response
-          </div>
-          <h1 className="mt-5 text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-            Smart <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">AI Parking</span> Management Platform
-          </h1>
-          <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Turn any IP camera into a real-time parking sensor. Operators see every slot, drivers book in 10 seconds, and revenue grows without lifting concrete.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="glow-primary"><Link to="/auth">Start Free <ArrowRight className="ml-1.5 h-4 w-4" /></Link></Button>
-            <Button asChild size="lg" variant="outline"><a href="#how">Book a Demo</a></Button>
-          </div>
-          <div className="mt-8 grid grid-cols-3 gap-6">
-            {[{label:"Avg accuracy",value:"97.2%"},{label:"Lots online",value:"240+"},{label:"Bookings/day",value:"12.4k"}].map((s) => (
-              <div key={s.label}>
-                <div className="text-2xl font-bold tracking-tight">{s.value}</div>
-                <div className="text-xs text-muted-foreground">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <HeroVisual />
-      </div>
-    </section>
-  );
-}
-
-function HeroVisual() {
-  return (
-    <div className="relative rounded-3xl border border-border bg-card/60 p-5 shadow-2xl backdrop-blur-xl glow-primary">
-      <div className="flex items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
-          <div className="grid h-7 w-7 place-items-center rounded-lg bg-primary/15 text-primary"><Camera className="h-3.5 w-3.5" /></div>
-          <div>
-            <div className="text-xs font-semibold">Tashkent City Mall · Floor B2</div>
-            <div className="text-[10px] text-muted-foreground">Camera 02 · 1080p · 97% accuracy</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-semibold text-success">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success" /> LIVE
-        </div>
-      </div>
-      <div className="rounded-2xl border border-border bg-secondary/40 p-4">
-        <ParkingGrid slots={mockSlots.slice(0, 40)} cols={10} compact />
-        <div className="mt-4"><SlotLegend /></div>
-      </div>
-      <div className="mt-4 grid grid-cols-3 gap-2">
-        {[{l:"Occupied",v:"168",t:"danger"},{l:"Reserved",v:"22",t:"warning"},{l:"Available",v:"50",t:"success"}].map((m) => (
-          <div key={m.l} className="rounded-xl border border-border bg-card p-3">
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{m.l}</div>
-            <div className={`mt-1 text-lg font-bold ${m.t==="danger"?"text-danger":m.t==="warning"?"text-warning":"text-success"}`}>{m.v}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function LogoStrip() {
-  return (
-    <div className="border-y border-border/50 bg-card/30 py-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="text-center text-xs uppercase tracking-widest text-muted-foreground">Trusted by parking operators across Central Asia</div>
-        <div className="mt-5 grid grid-cols-2 items-center gap-6 opacity-70 sm:grid-cols-3 md:grid-cols-6">
-          {["Tashkent City","Magic Mall","Compass","Silk Road","Samarkand Plaza","ParkGo"].map((n) => (
-            <div key={n} className="text-center text-sm font-bold tracking-tight text-muted-foreground">{n}</div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const features = [
-  { icon: Eye, title: "Computer vision detection", desc: "Frame-by-frame slot detection with 97%+ accuracy across day, night, rain, and snow." },
-  { icon: Cpu, title: "Edge + cloud AI", desc: "Run inference locally for latency or in the cloud for scale — same dashboard, one API." },
-  { icon: Zap, title: "Real-time updates", desc: "Driver apps and operator dashboards stay in sync via WebSockets in under 200ms." },
-  { icon: MapPin, title: "Smart map & ETA", desc: "Drivers find the nearest free slot ranked by distance, price, and live availability." },
-  { icon: Shield, title: "License plate OCR", desc: "Automated entry and exit logs, paired with bookings for fully touchless parking." },
-  { icon: LineChartIcon, title: "Revenue analytics", desc: "Owners track occupancy, peak hours, and revenue with one-click CSV & PDF exports." },
-];
-
-function Features() {
-  return (
-    <section id="features" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <div className="text-xs uppercase tracking-widest text-primary">The platform</div>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Everything a parking operator needs, in one console.</h2>
-        <p className="mt-3 text-muted-foreground">Built for operators with multiple lots and drivers who hate circling the block.</p>
-      </div>
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((f) => (
-          <div key={f.title} className="group rounded-2xl border border-border bg-card p-6 transition hover:border-primary/50 hover:shadow-xl">
-            <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
-              <f.icon className="h-5 w-5" />
+    <section className="relative">
+      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-8 pt-6">
+        <div className="relative h-[560px] overflow-hidden rounded-3xl">
+          <img src={garageHero} alt="AI parking garage" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" />
+          <div className="relative z-10 flex h-full max-w-2xl flex-col justify-center px-8 sm:px-14">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-[#1D4ED8]">
+              <BadgeCheck className="h-3.5 w-3.5" /> O'ZBEKISTONDA №1 PLATFORMA
             </div>
-            <h3 className="mt-5 text-base font-semibold tracking-tight">{f.title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function DashboardPreview() {
-  return (
-    <section className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6">
-      <div className="rounded-3xl border border-border bg-gradient-to-br from-card to-secondary/40 p-6 shadow-2xl sm:p-10">
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.4fr]">
-          <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-semibold text-accent"><Sparkles className="h-3 w-3" /> Operator dashboard</div>
-            <h3 className="mt-4 text-2xl font-bold sm:text-3xl">A control tower for every lot you own.</h3>
-            <p className="mt-3 text-sm text-muted-foreground sm:text-base">Live occupancy, AI confidence, camera health, and booking flow — all in one calm, fast interface.</p>
-            <ul className="mt-6 space-y-2.5">
-              {["Multi-lot rollup with per-floor drill-down","Camera health + AI latency telemetry","Driver bookings approve / extend / refund","CSV & PDF analytics export"].map((t) => (
-                <li key={t} className="flex items-start gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 shrink-0 text-success" /><span>{t}</span></li>
-              ))}
-            </ul>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild><Link to="/admin">Open Admin Demo</Link></Button>
-              <Button asChild variant="outline"><Link to="/owner">Owner Demo</Link></Button>
-              <Button asChild variant="ghost"><Link to="/driver">Driver App</Link></Button>
-            </div>
-          </div>
-          <div className="relative rounded-2xl border border-border bg-card p-4 shadow-xl">
-            <div className="flex items-center justify-between pb-3">
-              <div className="flex items-center gap-2"><Activity className="h-4 w-4 text-primary" /><span className="text-xs font-semibold">24h Occupancy</span></div>
-              <span className="text-[10px] text-muted-foreground">Updated just now</span>
-            </div>
-            <div className="h-60">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={occupancySeries}>
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.488 0.217 264)" stopOpacity={0.6} /><stop offset="100%" stopColor="oklch(0.488 0.217 264)" stopOpacity={0} /></linearGradient>
-                    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="oklch(0.696 0.165 162)" stopOpacity={0.6} /><stop offset="100%" stopColor="oklch(0.696 0.165 162)" stopOpacity={0} /></linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} />
-                  <XAxis dataKey="hour" tick={{ fontSize: 10 }} stroke="currentColor" strokeOpacity={0.3} />
-                  <YAxis tick={{ fontSize: 10 }} stroke="currentColor" strokeOpacity={0.3} />
-                  <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
-                  <Area type="monotone" dataKey="occupancy" stroke="oklch(0.488 0.217 264)" fill="url(#g1)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="reserved" stroke="oklch(0.696 0.165 162)" fill="url(#g2)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
+            <h1 className="mt-6 text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-slate-900">
+              Oson Parking — Aqlli to'xtash joylari boshqaruvi
+            </h1>
+            <p className="mt-5 max-w-lg text-base text-slate-600 leading-relaxed">
+              AI texnologiyalari yordamida vaqtingizni va mablag'ingizni tejang. O'zbekistondagi birinchi raqamli aqlli parking platformasi bilan kelajakni his qiling.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/auth" className="inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 hover:bg-[#1e40af] transition">
+                Hozir boshlash <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a href="#services" className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-slate-900 border border-slate-200 hover:border-slate-300 transition">
+                Demo ko'rish
+              </a>
             </div>
           </div>
         </div>
@@ -222,60 +85,26 @@ function DashboardPreview() {
   );
 }
 
-function HowItWorks() {
-  const steps = [
-    { n: "01", icon: Camera, title: "Mount any IP camera", desc: "Point at your lot. Stream RTSP/HTTP to OsonParking — no special hardware required." },
-    { n: "02", icon: Cpu, title: "AI vision learns slots", desc: "Draw slot polygons once; our model tracks vehicles, plates, and occupancy frame by frame." },
-    { n: "03", icon: CarFront, title: "Drivers book live", desc: "Drivers see free slots in real time and reserve in 10 seconds with a QR-coded ticket." },
+function Services() {
+  const items = [
+    { icon: Camera, title: "AI OCR Tizimi", desc: "Davlat raqamlarini 99.9% aniqlik bilan avtomatik tanish va darvozalarni boshqarish." },
+    { icon: Activity, title: "Real-vaqt Monitoringi", desc: "Parking holatini istalgan vaqtda va istalgan joydan mobil ilova orqali kuzatib boring." },
+    { icon: CalendarCheck, title: "Oson Band Qilish", desc: "Haydovchilar uchun bo'sh joylarni oldindan band qilish va to'lovlarni amalga oshirish." },
   ];
   return (
-    <section id="how" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <div className="text-xs uppercase tracking-widest text-primary">How it works</div>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Live in three steps.</h2>
-      </div>
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
-        {steps.map((s) => (
-          <div key={s.n} className="rounded-2xl border border-border bg-card p-7">
-            <div className="flex items-center justify-between">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary"><s.icon className="h-5 w-5" /></div>
-              <span className="text-3xl font-black text-muted-foreground/30">{s.n}</span>
-            </div>
-            <h3 className="mt-5 text-lg font-semibold tracking-tight">{s.title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Pricing() {
-  const plans = [
-    { name: "Starter", price: "Free", desc: "For pilots & single-lot operators", features: ["1 lot, 2 cameras","Up to 30 slots","Live dashboard","Email support"], cta: "Start Free", featured: false },
-    { name: "Growth", price: "$149", suffix: "/lot/mo", desc: "For chains adding lots monthly", features: ["Unlimited cameras","Plate OCR + bookings","Driver app integration","Priority support"], cta: "Start Growth", featured: true },
-    { name: "Enterprise", price: "Custom", desc: "City-scale deployments", features: ["SSO + audit logs","On-prem AI inference","Custom integrations","Dedicated success team"], cta: "Talk to Sales", featured: false },
-  ];
-  return (
-    <section id="pricing" className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <div className="text-xs uppercase tracking-widest text-primary">Pricing</div>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Plans that grow with your lots.</h2>
+    <section id="services" className="mx-auto max-w-7xl px-4 sm:px-8 py-20">
+      <div className="text-center">
+        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Bizning xizmatlarimiz</h2>
+        <p className="mt-3 text-slate-500">Boshqaruvni avtomatlashtirish uchun mukammal yechimlar</p>
       </div>
       <div className="mt-12 grid gap-6 md:grid-cols-3">
-        {plans.map((p) => (
-          <div key={p.name} className={`relative rounded-2xl border p-7 ${p.featured?"border-primary bg-primary/5 glow-primary":"border-border bg-card"}`}>
-            {p.featured && <div className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">Most popular</div>}
-            <div className="text-sm font-semibold">{p.name}</div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="text-3xl font-bold">{p.price}</span>
-              {p.suffix && <span className="text-sm text-muted-foreground">{p.suffix}</span>}
+        {items.map((s) => (
+          <div key={s.title} className="rounded-2xl bg-white p-7 border border-slate-100 shadow-[0_2px_8px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_24px_rgba(29,78,216,0.08)] transition">
+            <div className="grid h-12 w-12 place-items-center rounded-xl bg-blue-50 text-[#1D4ED8]">
+              <s.icon className="h-6 w-6" />
             </div>
-            <div className="mt-1 text-sm text-muted-foreground">{p.desc}</div>
-            <ul className="mt-6 space-y-2">
-              {p.features.map((f) => <li key={f} className="flex items-start gap-2 text-sm"><Check className="mt-0.5 h-4 w-4 text-success" /> {f}</li>)}
-            </ul>
-            <Button asChild className="mt-6 w-full" variant={p.featured?"default":"outline"}><Link to="/auth">{p.cta}</Link></Button>
+            <h3 className="mt-6 text-lg font-bold text-slate-900">{s.title}</h3>
+            <p className="mt-2 text-sm text-slate-500 leading-relaxed">{s.desc}</p>
           </div>
         ))}
       </div>
@@ -283,69 +112,72 @@ function Pricing() {
   );
 }
 
-function Testimonials() {
-  const ts = [
-    { q: "We cut staff at the gate by half and revenue still went up 18%.", a: "Alisher K.", r: "Tashkent City Mall" },
-    { q: "I finally know which floor pays for itself and which doesn't.", a: "Nigora T.", r: "Magic Realty" },
-    { q: "Drivers love the QR ticket. Zero printer paper jams.", a: "Dilshod A.", r: "Compass Group" },
+function Experience() {
+  const items = [
+    { t: "Tezkor To'lov", d: "Navbatlarsiz, Payme, Uzum yoki karta orqali to'lov." },
+    { t: "Navigatsiya", d: "Parking ichidagi aniq bo'sh joygacha yo'naltirish." },
+    { t: "Xavfsizlik", d: "Avtomobilingiz holati haqida doimiy xabarnomalar." },
   ];
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-      <div className="grid gap-5 md:grid-cols-3">
-        {ts.map((t) => (
-          <figure key={t.a} className="rounded-2xl border border-border bg-card p-6">
-            <blockquote className="text-sm leading-relaxed">"{t.q}"</blockquote>
-            <figcaption className="mt-5 flex items-center gap-3">
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/15 text-xs font-bold text-primary">{t.a.split(" ").map(x=>x[0]).join("")}</div>
-              <div>
-                <div className="text-sm font-semibold">{t.a}</div>
-                <div className="text-xs text-muted-foreground">{t.r}</div>
-              </div>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function FAQ() {
-  const qs = [
-    { q: "Do I need special cameras?", a: "No — any RTSP/HTTP IP camera works. Most operators use existing CCTV." },
-    { q: "How accurate is the AI?", a: "Across 240+ live lots we average 97.2% accuracy, day or night." },
-    { q: "Can drivers pay in-app?", a: "Yes — credit card, mobile wallets, and Click/Payme integrations are supported." },
-    { q: "Is there an SLA?", a: "Growth and Enterprise plans include 99.9% uptime SLA and dedicated incident response." },
-  ];
-  return (
-    <section id="faq" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
-      <div className="text-center">
-        <div className="text-xs uppercase tracking-widest text-primary">FAQ</div>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Common questions.</h2>
-      </div>
-      <div className="mt-10 space-y-3">
-        {qs.map((f) => (
-          <details key={f.q} className="group rounded-2xl border border-border bg-card p-5 open:bg-card">
-            <summary className="flex cursor-pointer items-center justify-between text-sm font-semibold">{f.q}<span className="text-primary transition group-open:rotate-45">+</span></summary>
-            <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
-          </details>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CTA() {
-  return (
-    <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6">
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/20 via-card to-accent/10 p-10 text-center sm:p-16">
-        <div className="pointer-events-none absolute inset-0 grid-fade">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.488_0.217_264/0.3),transparent_60%)]" />
+    <section className="mx-auto max-w-7xl px-4 sm:px-8 pb-20">
+      <div className="grid items-center gap-10 md:grid-cols-2">
+        <div className="overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(15,23,42,0.08)]">
+          <img src={parkingHero.url} alt="Smart park reserved" className="h-full w-full object-cover" loading="lazy" />
         </div>
-        <h2 className="relative text-3xl font-bold tracking-tight sm:text-4xl">Start operating like a tech company.</h2>
-        <p className="relative mx-auto mt-3 max-w-xl text-muted-foreground">Two cameras, ten minutes, zero contracts. Free forever for your first lot.</p>
-        <div className="relative mt-7 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg" className="glow-primary"><Link to="/auth">Start Free</Link></Button>
-          <Button asChild size="lg" variant="outline"><a href="#how">Book a Demo</a></Button>
+        <div>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Yangi Avlod Foydalanuvchi Tajribasi</h2>
+          <p className="mt-4 text-slate-500">Oson Parking mobil ilovasi orqali siz:</p>
+          <ul className="mt-6 space-y-5">
+            {items.map((i) => (
+              <li key={i.t} className="flex items-start gap-4">
+                <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-[#1D4ED8]" />
+                <div>
+                  <div className="font-semibold text-slate-900">{i.t}</div>
+                  <div className="text-sm text-slate-500">{i.d}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AboutPricing() {
+  return (
+    <section id="about" className="bg-[#0F172A] text-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 py-20 grid gap-10 md:grid-cols-2 md:items-center">
+        <div>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Biz haqimizda va Narxlar</h2>
+          <p className="mt-5 text-slate-300 leading-relaxed max-w-lg">
+            Oson Parking — bu shunchaki dastur emas, bu shaharlarimizni aqlli va qulay qilish sari tashlangan qadam. Biz biznes egalariga daromadni 30% gacha oshirishga, haydovchilarga esa har oy 5 soatdan ortiq vaqt tejalishiga yordam beramiz.
+          </p>
+          <div className="mt-8 grid grid-cols-2 gap-4 max-w-md">
+            <div className="rounded-xl bg-white/5 border border-white/10 p-5">
+              <div className="text-3xl font-bold">500+</div>
+              <div className="mt-1 text-[11px] uppercase tracking-wider text-slate-400">Muvaffaqiyatli loyihalar</div>
+            </div>
+            <div className="rounded-xl bg-white/5 border border-white/10 p-5">
+              <div className="text-3xl font-bold">1M+</div>
+              <div className="mt-1 text-[11px] uppercase tracking-wider text-slate-400">Faol foydalanuvchilar</div>
+            </div>
+          </div>
+        </div>
+        <div id="pricing" className="relative rounded-2xl bg-[#1E293B] border border-white/10 p-8 shadow-2xl">
+          <div className="inline-flex items-center rounded-full bg-blue-500/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-blue-300">
+            Eng mashhur
+          </div>
+          <div className="mt-5 text-5xl font-bold tracking-tight">Premium</div>
+          <p className="mt-2 text-slate-400">Barcha AI imkoniyatlari bilan</p>
+          <ul className="mt-6 space-y-3 text-sm">
+            {["Cheksiz AI raqam tanish","24/7 Analitika va Dashboard","VIP qo'llab-quvvatlash"].map((f) => (
+              <li key={f} className="flex items-center gap-3"><Check className="h-5 w-5 text-[#10B981]" /> {f}</li>
+            ))}
+          </ul>
+          <Link to="/auth" className="mt-7 inline-flex w-full items-center justify-center rounded-xl bg-[#1D4ED8] px-6 py-3.5 text-sm font-semibold text-white hover:bg-[#1e40af] transition">
+            Hamkorlikni boshlash
+          </Link>
         </div>
       </div>
     </section>
@@ -354,27 +186,42 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border bg-card/40">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-4">
+    <footer id="contact" className="bg-[#0B1220] text-slate-300">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 py-14 grid gap-10 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 place-items-center rounded-xl bg-primary"><span className="text-xs font-black text-primary-foreground">O</span></div>
-            <div className="text-sm font-bold">OsonParking</div>
-          </div>
-          <p className="mt-3 text-xs text-muted-foreground">AI computer vision for parking operators and drivers.</p>
+          <div className="text-lg font-bold text-white">Oson Parking</div>
+          <p className="mt-3 text-sm text-slate-400 max-w-xs">O'zbekistondagi aqlli parking yechimlari bo'yicha yetakchi provayder.</p>
         </div>
-        {[
-          { h: "Product", l: ["Features","Pricing","Demo","Changelog"] },
-          { h: "Company", l: ["About","Customers","Careers","Contact"] },
-          { h: "Legal", l: ["Privacy","Terms","Security","DPA"] },
-        ].map((c) => (
-          <div key={c.h}>
-            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{c.h}</div>
-            <ul className="mt-3 space-y-1.5 text-sm">{c.l.map((x) => <li key={x}><a href="#" className="text-muted-foreground hover:text-foreground">{x}</a></li>)}</ul>
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">Kompaniya</div>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li><a href="#about" className="hover:text-white">Biz haqimizda</a></li>
+            <li><a href="#" className="hover:text-white">Karyera</a></li>
+            <li><a href="#" className="hover:text-white">Yangiliklar</a></li>
+          </ul>
+        </div>
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">Yordam</div>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li><a href="#" className="hover:text-white">Yordam markazi</a></li>
+            <li><a href="#" className="hover:text-white">Maxfiylik siyosati</a></li>
+            <li><a href="#" className="hover:text-white">Xizmat ko'rsatish shartlari</a></li>
+          </ul>
+        </div>
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">Aloqa</div>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>+998 71 123 45 67</li>
+            <li>info@osonparking.uz</li>
+          </ul>
+          <div className="mt-4 flex items-center gap-3 text-slate-400">
+            <a href="#" aria-label="Web"><Globe className="h-4 w-4 hover:text-white" /></a>
+            <a href="#" aria-label="Email"><AtSign className="h-4 w-4 hover:text-white" /></a>
+            <a href="#" aria-label="Share"><Share2 className="h-4 w-4 hover:text-white" /></a>
           </div>
-        ))}
+        </div>
       </div>
-      <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">© 2026 OsonParking. All rights reserved.</div>
+      <div className="border-t border-white/5 py-5 text-center text-xs text-slate-500">© 2026 Oson Parking. Barcha huquqlar himoyalangan.</div>
     </footer>
   );
 }
