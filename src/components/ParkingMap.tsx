@@ -61,13 +61,18 @@ interface ParkingMapProps {
   onSelect?: (lot: ParkingLot) => void;
   onUserLocation?: (loc: { lat: number; lng: number }) => void;
   selectedId?: string;
+  userLocation?: { lat: number; lng: number } | null;
+  onLocateClick?: () => void;
+  locating?: boolean;
+  radiusKm?: number;
 }
 
-export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, selectedId }: ParkingMapProps) {
+export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, selectedId, userLocation, onLocateClick, locating, radiusKm }: ParkingMapProps) {
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const userMarkerRef = useRef<any>(null);
+  const radiusCircleRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,56 +102,75 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
     markersRef.current = lots.map((lot) => {
       const free = lot.total - lot.occupied - lot.reserved;
       const full = free <= 0;
-      const color = full ? "#E11D48" : "#10B981";
+      const low = !full && free <= Math.max(5, lot.total * 0.1);
+      const color = full ? "#E11D48" : low ? "#F59E0B" : "#10B981";
       const isSelected = selectedId === lot.id;
       const marker = new window.google.maps.Marker({
         position: { lat: lot.lat, lng: lot.lng },
         map: mapRef.current,
-        title: lot.name,
+        title: `${lot.name} — ${free} free / ${lot.total}`,
         icon: {
           path: "M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0z",
           fillColor: color,
           fillOpacity: 1,
           strokeColor: "#ffffff",
           strokeWeight: isSelected ? 4 : 2,
-          scale: isSelected ? 1.6 : 1.3,
+          scale: isSelected ? 1.9 : 1.55,
           anchor: new window.google.maps.Point(12, 32),
           labelOrigin: new window.google.maps.Point(12, 12),
         },
-        label: { text: full ? "X" : "P", color: "#ffffff", fontSize: "12px", fontWeight: "700" },
+        label: {
+          text: full ? "FULL" : String(free),
+          color: "#ffffff",
+          fontSize: full ? "9px" : "11px",
+          fontWeight: "800",
+        },
       });
       marker.addListener("click", () => onSelect?.(lot));
       return marker;
     });
   }, [lots, selectedId, onSelect]);
 
-  const locate = () => {
+  // Sync external user location marker + radius circle
+  useEffect(() => {
+    if (!mapRef.current || !window.google) return;
+    if (userMarkerRef.current) { userMarkerRef.current.setMap(null); userMarkerRef.current = null; }
+    if (radiusCircleRef.current) { radiusCircleRef.current.setMap(null); radiusCircleRef.current = null; }
+    if (!userLocation) return;
+    userMarkerRef.current = new window.google.maps.Marker({
+      position: userLocation,
+      map: mapRef.current,
+      icon: { path: window.google.maps.SymbolPath.CIRCLE, fillColor: "#1D4ED8", fillOpacity: 1, strokeColor: "#ffffff", strokeWeight: 3, scale: 9 },
+      zIndex: 999,
+    });
+    if (radiusKm && radiusKm > 0) {
+      radiusCircleRef.current = new window.google.maps.Circle({
+        map: mapRef.current,
+        center: userLocation,
+        radius: radiusKm * 1000,
+        strokeColor: "#1D4ED8", strokeOpacity: 0.5, strokeWeight: 1.5,
+        fillColor: "#1D4ED8", fillOpacity: 0.06,
+      });
+    }
+    mapRef.current.panTo(userLocation);
+  }, [userLocation, radiusKm]);
+
+  const fallbackLocate = () => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         onUserLocation?.(loc);
-        if (!mapRef.current || !window.google) return;
-        mapRef.current.panTo(loc);
-        mapRef.current.setZoom(14);
-        if (userMarkerRef.current) userMarkerRef.current.setMap(null);
-        userMarkerRef.current = new window.google.maps.Marker({
-          position: loc,
-          map: mapRef.current,
-          icon: {
-            path: window.google.maps.SymbolPath.CIRCLE,
-            fillColor: "#1D4ED8",
-            fillOpacity: 1,
-            strokeColor: "#ffffff",
-            strokeWeight: 3,
-            scale: 9,
-          },
-          zIndex: 999,
-        });
+        if (mapRef.current) mapRef.current.setZoom(14);
       },
       () => setError("Location permission denied"),
       { enableHighAccuracy: true, timeout: 8000 },
     );
+  };
+
+  const handleLocate = () => {
+    if (onLocateClick) onLocateClick();
+    else fallbackLocate();
   };
 
   return (
@@ -161,11 +185,12 @@ export function ParkingMap({ lots, height = "420px", onSelect, onUserLocation, s
         <div className="absolute inset-x-4 top-4 rounded-lg bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700 ring-1 ring-rose-200">{error}</div>
       )}
       <button
-        onClick={locate}
+        onClick={handleLocate}
         aria-label="My location"
-        className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white text-[#1D4ED8] shadow-lg ring-1 ring-slate-200 transition hover:scale-105 active:scale-95"
+        className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white text-[#1D4ED8] shadow-lg ring-1 ring-slate-200 transition hover:scale-105 active:scale-95 disabled:opacity-60"
+        disabled={locating}
       >
-        <Crosshair className="h-5 w-5" />
+        {locating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Crosshair className="h-5 w-5" />}
       </button>
     </div>
   );
