@@ -24,20 +24,33 @@ export interface DriverBooking {
 
 const KEY = "osonparking.bookings.v1";
 const listeners = new Set<() => void>();
+const createListeners = new Set<(b: DriverBooking) => void>();
+let cache: DriverBooking[] = [];
+let cacheLoaded = false;
 
 function read(): DriverBooking[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; }
+  if (typeof window === "undefined") return emptyArr;
+  if (!cacheLoaded) {
+    try { cache = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { cache = []; }
+    cacheLoaded = true;
+  }
+  return cache;
 }
 function write(items: DriverBooking[]) {
   if (typeof window === "undefined") return;
+  cache = items;
+  cacheLoaded = true;
   localStorage.setItem(KEY, JSON.stringify(items));
   listeners.forEach((l) => l());
 }
 
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (e) => {
-    if (e.key === KEY) listeners.forEach((l) => l());
+    if (e.key === KEY) {
+      try { cache = JSON.parse(e.newValue || "[]"); } catch { cache = []; }
+      cacheLoaded = true;
+      listeners.forEach((l) => l());
+    }
   });
 }
 
@@ -54,6 +67,10 @@ export const bookingStore = {
   create(input: Omit<DriverBooking, "id" | "status" | "createdAt">): DriverBooking {
     const item: DriverBooking = { ...input, id: rid(), status: "pending", createdAt: Date.now() };
     write([item, ...read()]);
+    createListeners.forEach((l) => l(item));
+    if (typeof window !== "undefined") {
+      try { window.dispatchEvent(new CustomEvent("osonparking:booking-created", { detail: item })); } catch {}
+    }
     return item;
   },
   confirm(id: string) {
@@ -72,6 +89,10 @@ export const bookingStore = {
   },
   reject(id: string) {
     write(read().map((x) => (x.id === id ? { ...x, status: "cancelled", endedAt: Date.now() } : x)));
+  },
+  onCreate(cb: (b: DriverBooking) => void) {
+    createListeners.add(cb);
+    return () => { createListeners.delete(cb); };
   },
 };
 
