@@ -35,12 +35,14 @@ export function AppShell({
   brandRole,
   nav,
   user,
+  userExtras,
   children,
 }: {
   brand: string;
   brandRole: string;
   nav: NavItem[];
   user: { name: string; email: string; avatar: string };
+  userExtras?: ReactNode;
   children: ReactNode;
 }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -129,9 +131,15 @@ export function AppShell({
                     <ChevronDown className="hidden h-3 w-3 text-muted-foreground sm:block" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className={userExtras ? "w-80" : "w-56"}>
                   <DropdownMenuLabel>Signed in as {user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {userExtras && (
+                    <>
+                      <div className="px-1 pb-1">{userExtras}</div>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem>Billing</DropdownMenuItem>
