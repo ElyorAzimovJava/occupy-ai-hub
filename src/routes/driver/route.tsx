@@ -33,7 +33,7 @@ function DriverShell() {
         </div>
       </header>
       <main className="mx-auto max-w-md px-5 py-5"><Outlet/></main>
-      <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} driverName={driver.name} driverEmail={driver.email} driverInitials={driver.initials} onSignOut={() => { session.signOut(); navigate({ to: "/auth" }); }} />
+      <SideMenu open={menuOpen} onClose={() => setMenuOpen(false)} driverName={driver.name} driverEmail={driver.email} driverInitials={driver.initials} onSignOut={() => { session.signOut(); navigate({ to: "/" }); }} />
       <nav className="fixed inset-x-0 bottom-3 z-40 mx-auto max-w-md px-3">
         <div className="grid grid-cols-4 rounded-2xl border border-slate-200 bg-white/95 px-2 py-2 shadow-[0_10px_30px_-10px_rgba(15,23,42,0.18)] backdrop-blur">
           {items.map((it) => {

@@ -165,7 +165,7 @@ function DriverProfile() {
       <VehicleDialog state={carOpen} onClose={() => setCarOpen(null)} driverId={driverId} />
       <CardDialog open={cardOpen} onClose={() => setCardOpen(false)} driverId={driverId} holderDefault={data.name} />
       <AccountSettingsDialog open={accountOpen} onClose={() => setAccountOpen(false)} />
-      <SignOutDialog open={signOutOpen} onClose={() => setSignOutOpen(false)} onConfirm={() => { session.signOut(); toast.success("Tizimdan chiqdingiz"); navigate({ to: "/auth" }); }} />
+      <SignOutDialog open={signOutOpen} onClose={() => setSignOutOpen(false)} onConfirm={() => { session.signOut(); toast.success("Tizimdan chiqdingiz"); navigate({ to: "/" }); }} />
     </div>
   );
 }
