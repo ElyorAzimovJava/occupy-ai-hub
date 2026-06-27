@@ -116,6 +116,13 @@ export const mockLots: ParkingLot[] = [
   { id: "lot-10", name: "Oybek Metro Garage", owner: "Sardor Aliev", address: "Oybek St 22, Tashkent", total: 130, occupied: 95, reserved: 11, pricePerHour: 3, revenue: 7820, status: "active", lat: 41.2967, lng: 69.2680, image: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80", rating: 4.5 },
   { id: "lot-11", name: "Samarkand Darvoza Lot", owner: "Bobur Yusupov", address: "Koratosh St, Tashkent", total: 220, occupied: 140, reserved: 20, pricePerHour: 3, revenue: 10940, status: "active", lat: 41.3084, lng: 69.2421, image: "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=800&q=80", rating: 4.3 },
   { id: "lot-12", name: "Atlas Mall Underground", owner: "Zarina Ismoilova", address: "Mirzo Ulug'bek 80, Tashkent", total: 350, occupied: 200, reserved: 30, pricePerHour: 5, revenue: 24380, status: "maintenance", lat: 41.3398, lng: 69.3251, image: "https://images.unsplash.com/photo-1545179605-1296651e9d43?w=800&q=80", rating: 4.7 },
+  // Sirdaryo viloyati - Guliston shahri
+  { id: "lot-13", name: "Guliston Central Bazaar", owner: "Rustam Mamadaliyev", address: "Mustaqillik ko'chasi 4, Guliston", total: 120, occupied: 64, reserved: 9, pricePerHour: 2, revenue: 4820, status: "active", lat: 40.4897, lng: 68.7842, image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80", rating: 4.4 },
+  { id: "lot-14", name: "Sirdaryo Plaza", owner: "Feruza Norqulova", address: "Islom Karimov shoh ko'chasi 22, Guliston", total: 180, occupied: 88, reserved: 12, pricePerHour: 3, revenue: 7340, status: "active", lat: 40.4925, lng: 68.7791, image: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80", rating: 4.6 },
+  { id: "lot-15", name: "Guliston Hokimiyat Parking", owner: "Akmal Hasanov", address: "A. Navoiy ko'chasi 1, Guliston", total: 90, occupied: 41, reserved: 6, pricePerHour: 2, revenue: 2640, status: "active", lat: 40.4868, lng: 68.7822, image: "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=800&q=80", rating: 4.3 },
+  { id: "lot-16", name: "Guliston Train Station Lot", owner: "Shahnoza Egamberdiyeva", address: "Vokzal maydoni, Guliston", total: 140, occupied: 96, reserved: 14, pricePerHour: 2, revenue: 3210, status: "active", lat: 40.4756, lng: 68.7705, image: "https://images.unsplash.com/photo-1545179605-1296651e9d43?w=800&q=80", rating: 4.1 },
+  { id: "lot-17", name: "Guliston University Campus", owner: "Davron Yo'ldoshev", address: "Sirdaryo MDIU, Guliston", total: 160, occupied: 60, reserved: 10, pricePerHour: 1, revenue: 1980, status: "active", lat: 40.5012, lng: 68.7903, image: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80", rating: 4.5 },
+  { id: "lot-18", name: "Sirdaryo Sport Complex", owner: "Bahodir Tolipov", address: "Sport ko'chasi 7, Guliston", total: 110, occupied: 28, reserved: 4, pricePerHour: 2, revenue: 1420, status: "active", lat: 40.4934, lng: 68.7965, image: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80", rating: 4.4 },
 ];
 
 export const mockOwners: BusinessOwner[] = [
@@ -129,6 +136,12 @@ export const mockOwners: BusinessOwner[] = [
   { id: "o-8", name: "Jamshid Olimov", company: "Chorsu Trade LLC", email: "jamshid@chorsu.uz", phone: "+998 71 277 9090", lots: 1, revenue: 5210, status: "suspended", avatar: "JO" },
   { id: "o-9", name: "Madina Sharipova", company: "Yunusabad Estates", email: "madina@yunusabad.uz", phone: "+998 71 288 3030", lots: 1, revenue: 8120, status: "active", avatar: "MS" },
   { id: "o-10", name: "Zarina Ismoilova", company: "Atlas Group", email: "zarina@atlas.uz", phone: "+998 71 299 5050", lots: 1, revenue: 24380, status: "active", avatar: "ZI" },
+  { id: "o-11", name: "Rustam Mamadaliyev", company: "Guliston Bazaar Holdings", email: "rustam@gulistonbz.uz", phone: "+998 67 233 1010", lots: 1, revenue: 4820, status: "active", avatar: "RM" },
+  { id: "o-12", name: "Feruza Norqulova", company: "Sirdaryo Plaza LLC", email: "feruza@sirdaryoplaza.uz", phone: "+998 67 244 2020", lots: 1, revenue: 7340, status: "active", avatar: "FN" },
+  { id: "o-13", name: "Akmal Hasanov", company: "Hokimiyat Service", email: "akmal@hokservice.uz", phone: "+998 67 255 3030", lots: 1, revenue: 2640, status: "active", avatar: "AH" },
+  { id: "o-14", name: "Shahnoza Egamberdiyeva", company: "Vokzal Park Co.", email: "shahnoza@vokzalpark.uz", phone: "+998 67 266 4040", lots: 1, revenue: 3210, status: "active", avatar: "SE" },
+  { id: "o-15", name: "Davron Yo'ldoshev", company: "MDIU Campus Services", email: "davron@mdiu.uz", phone: "+998 67 277 5050", lots: 1, revenue: 1980, status: "active", avatar: "DY" },
+  { id: "o-16", name: "Bahodir Tolipov", company: "Sirdaryo Sport Group", email: "bahodir@sportsirdaryo.uz", phone: "+998 67 288 6060", lots: 1, revenue: 1420, status: "active", avatar: "BT" },
 ];
 
 export const mockCameras: Camera[] = [
