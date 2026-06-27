@@ -86,7 +86,7 @@ const menuSections: { title: string; items: { to: string; label: string; icon: a
   },
 ];
 
-function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+function SideMenu({ open, onClose, driverName, driverEmail, driverInitials, onSignOut }: { open: boolean; onClose: () => void; driverName: string; driverEmail: string; driverInitials: string; onSignOut: () => void }) {
   return (
     <>
       <div
@@ -98,12 +98,12 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       >
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 overflow-hidden rounded-full ring-2 ring-blue-100">
-              <img alt="" src="https://i.pravatar.cc/64?img=12" className="h-full w-full object-cover" />
+            <div className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-[#1D4ED8] to-[#3B82F6] text-xs font-bold text-white ring-2 ring-blue-100">
+              {driverInitials}
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-900">Azizbek Karimov</div>
-              <div className="text-[11px] text-slate-500">azizbek@oson.uz</div>
+              <div className="text-sm font-bold text-slate-900">{driverName}</div>
+              <div className="text-[11px] text-slate-500">{driverEmail}</div>
             </div>
           </div>
           <button onClick={onClose} aria-label="Yopish" className="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-500">
@@ -138,13 +138,12 @@ function SideMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
         </div>
 
         <div className="border-t border-slate-100 p-3">
-          <Link
-            to="/auth"
-            onClick={onClose}
-            className="flex items-center justify-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-100"
+          <button
+            onClick={() => { onClose(); onSignOut(); }}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 px-3 py-2.5 text-sm font-bold text-rose-600 hover:bg-rose-100"
           >
             <LogOut className="h-4 w-4" /> Chiqish
-          </Link>
+          </button>
           <div className="mt-2 text-center text-[10px] text-slate-400">Oson Parking • v1.0.0</div>
         </div>
       </aside>
