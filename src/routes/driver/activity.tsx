@@ -11,7 +11,7 @@ import {
 import { useBookings, bookingStore, formatUzsPlain } from "@/lib/bookingStore";
 
 export const Route = createFileRoute("/driver/activity")({
-  head: () => ({ meta: [{ title: "Faoliyat - Driver" }] }),
+  head: () => ({ meta: [{ title: "Faoliyat - Haydovchi" }] }),
   component: Activity,
 });
 

@@ -15,7 +15,7 @@ import { useCurrentDriver } from "@/lib/session";
 type SearchParams = { lot?: string };
 
 export const Route = createFileRoute("/driver/booking")({
-  head: () => ({ meta: [{ title: "Bron qilish - Driver" }] }),
+  head: () => ({ meta: [{ title: "Bron qilish - Haydovchi" }] }),
   validateSearch: (s: Record<string, unknown>): SearchParams => ({
     lot: typeof s.lot === "string" ? s.lot : undefined,
   }),

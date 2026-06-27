@@ -12,10 +12,10 @@ export const Route = createFileRoute("/driver")({
 });
 
 const items = [
-  { to: "/driver", label: "Home", icon: Compass, exact: true },
-  { to: "/driver/search", label: "Search", icon: Search },
-  { to: "/driver/activity", label: "Activity", icon: Receipt },
-  { to: "/driver/profile", label: "Profile", icon: User },
+  { to: "/driver", label: "Bosh sahifa", icon: Compass, exact: true },
+  { to: "/driver/search", label: "Qidiruv", icon: Search },
+  { to: "/driver/activity", label: "Faoliyat", icon: Receipt },
+  { to: "/driver/profile", label: "Profil", icon: User },
 ];
 
 function DriverShell() {

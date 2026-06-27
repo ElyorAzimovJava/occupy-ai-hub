@@ -7,7 +7,7 @@ import { useGeolocation } from "@/lib/useGeolocation";
 import { useDriverPrefs } from "@/lib/useDriverPrefs";
 
 export const Route = createFileRoute("/driver/")({
-  head: () => ({ meta: [{ title: "Home - Driver" }] }),
+  head: () => ({ meta: [{ title: "Bosh sahifa - Haydovchi" }] }),
   component: DriverHome,
 });
 
@@ -25,7 +25,7 @@ function DriverHome() {
       <div className="relative">
         <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
         <input
-          placeholder="Search for parking, lots, or areas"
+          placeholder="Parking, joy yoki hudud qidirish"
           className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-[#1D4ED8] focus:outline-none focus:ring-4 focus:ring-blue-100"
         />
       </div>
@@ -34,10 +34,10 @@ function DriverHome() {
         <div className="flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
           <div className="flex-1">
-            <div className="font-semibold">Location unavailable</div>
-            <div>{geo.error} You can still browse all lots below.</div>
+            <div className="font-semibold">Joylashuv mavjud emas</div>
+            <div>{geo.error} Quyidagi barcha parkinglarni ko'rishingiz mumkin.</div>
           </div>
-          <button onClick={geo.request} className="rounded-lg bg-white px-2 py-1 font-semibold text-amber-700 ring-1 ring-amber-200">Retry</button>
+          <button onClick={geo.request} className="rounded-lg bg-white px-2 py-1 font-semibold text-amber-700 ring-1 ring-amber-200">Qayta urinish</button>
         </div>
       )}
 

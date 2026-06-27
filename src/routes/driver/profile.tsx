@@ -15,7 +15,7 @@ import { driverProfileStore, useDriverProfile, type PaymentCard } from "@/lib/dr
 import type { DriverVehicle } from "@/lib/session";
 
 export const Route = createFileRoute("/driver/profile")({
-  head: () => ({ meta: [{ title: "Profile - Driver" }] }),
+  head: () => ({ meta: [{ title: "Profil - Haydovchi" }] }),
   component: DriverProfile,
 });
 
