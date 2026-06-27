@@ -7,6 +7,7 @@ import { ParkingGrid } from "@/components/ParkingGrid";
 import { mockSlots } from "@/lib/mockData";
 import { Shield, ShieldCheck, Building2, CarFront, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { session, OWNER_ACCOUNTS, DRIVER_ACCOUNTS, ADMIN_ACCOUNTS } from "@/lib/session";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in · OsonParking" }, { name: "description", content: "Sign in to OsonParking — operator console and driver app." }] }),
@@ -16,12 +17,26 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [role, setRole] = useState<"admin" | "owner" | "driver">("owner");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(`Welcome to OsonParking`);
-    navigate({ to: role === "admin" ? "/admin" : role === "owner" ? "/owner" : "/driver" });
+    const acc = email && password
+      ? session.authenticate(email, password)
+      : session.signInAsRole(role);
+    if (email && password && !acc) {
+      toast.error("Login yoki parol noto'g'ri");
+      return;
+    }
+    const r = acc?.role ?? role;
+    toast.success(`Xush kelibsiz, ${acc?.name ?? "OsonParking"}`);
+    navigate({ to: r === "admin" ? "/admin" : r === "owner" ? "/owner" : "/driver" });
+  };
+
+  const fillDemo = (e: string, p: string, r: typeof role) => {
+    setEmail(e); setPassword(p); setRole(r);
   };
 
   return (
@@ -77,11 +92,11 @@ function AuthPage() {
             )}
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="you@company.com" defaultValue="demo@osonparking.com" className="mt-1.5" required />
+              <Input id="email" type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5" required />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="••••••••" defaultValue="demo1234" className="mt-1.5" required />
+              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5" required />
             </div>
             <Button type="submit" className="w-full glow-primary">
               {mode === "signin" ? "Sign in" : "Create account"} <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -104,11 +119,46 @@ function AuthPage() {
             </button>
           </div>
 
-          <div className="mt-8 rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2 text-foreground"><ShieldCheck className="h-3.5 w-3.5 text-accent" /> Demo mode</div>
-            <div className="mt-1">No real auth — pick a role above and submit to enter that workspace.</div>
+          <div className="mt-8 rounded-xl border border-border bg-card p-3 text-xs">
+            <div className="flex items-center gap-2 text-foreground"><ShieldCheck className="h-3.5 w-3.5 text-accent" /> Demo akkauntlar — bosing va kiring</div>
+            <div className="mt-2 max-h-64 space-y-2 overflow-auto pr-1">
+              <DemoGroup label="Super Admin" accounts={ADMIN_ACCOUNTS.map(a => ({ email: a.email, password: a.password, label: a.name }))} role="admin" onPick={fillDemo} />
+              <DemoGroup label="Business Owners" accounts={OWNER_ACCOUNTS.map(a => ({ email: a.email, password: a.password, label: `${a.name} · ${a.company}` }))} role="owner" onPick={fillDemo} />
+              <DemoGroup label="Drivers" accounts={DRIVER_ACCOUNTS.map(a => ({ email: a.email, password: a.password, label: `${a.name} · ${a.vehicles[0]?.plate ?? ""}` }))} role="driver" onPick={fillDemo} />
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function DemoGroup({
+  label, accounts, role, onPick,
+}: {
+  label: string;
+  accounts: { email: string; password: string; label: string }[];
+  role: "admin" | "owner" | "driver";
+  onPick: (e: string, p: string, r: "admin" | "owner" | "driver") => void;
+}) {
+  return (
+    <div>
+      <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className="space-y-1">
+        {accounts.map((a) => (
+          <button
+            type="button"
+            key={a.email}
+            onClick={() => onPick(a.email, a.password, role)}
+            className="flex w-full items-center justify-between gap-2 rounded-md border border-border bg-background/50 px-2 py-1.5 text-left text-[11px] transition hover:border-primary/40 hover:bg-primary/5"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="truncate font-semibold text-foreground">{a.label}</div>
+              <div className="truncate font-mono text-[10px] text-muted-foreground">{a.email} · {a.password}</div>
+            </div>
+            <ArrowRight className="h-3 w-3 shrink-0 text-primary" />
+          </button>
+        ))}
       </div>
     </div>
   );
