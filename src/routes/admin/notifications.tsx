@@ -6,14 +6,14 @@ export const Route = createFileRoute("/admin/notifications")({
   head: () => ({ meta: [{ title: "Bildirishnomalar - Admin" }] }),
   component: () => {
     const items = [
-      { i: AlertTriangle, t: "Compass Mall - Zone C camera offline", s: "3m ago", tone: "danger" as const },
-      { i: CheckCircle2, t: "Magic City Garage - AI accuracy back to 98%", s: "12m ago", tone: "success" as const },
-      { i: Info, t: "New owner signup: Park&Go", s: "1h ago", tone: "info" as const },
-      { i: Bell, t: "Weekly revenue report is ready", s: "2h ago", tone: "default" as const },
+      { i: AlertTriangle, t: "Compass Mall — C zonasi kamerasi oflayn", s: "3 daq oldin", tone: "danger" as const },
+      { i: CheckCircle2, t: "Magic City Garage — AI aniqligi 98% ga qaytdi", s: "12 daq oldin", tone: "success" as const },
+      { i: Info, t: "Yangi egasi royxatdan otdi: Park&Go", s: "1 soat oldin", tone: "info" as const },
+      { i: Bell, t: "Haftalik daromad hisoboti tayyor", s: "2 soat oldin", tone: "default" as const },
     ];
     return (
       <div>
-        <PageHeader title="Notifications" subtitle="Platform alerts, system events, and operator activity." />
+        <PageHeader title="Bildirishnomalar" subtitle="Platforma ogohlantirishlari, tizim hodisalari va operator faoliyati." />
         <div className="space-y-3">
           {items.map((n, idx) => (
             <div key={idx} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5">
