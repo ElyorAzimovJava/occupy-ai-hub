@@ -15,21 +15,21 @@ const ctip = { background: "var(--card)", border: "1px solid var(--border)", bor
 function AdminDashboard() {
   return (
     <div>
-      <PageHeader title="Platform overview" subtitle="What's happening across all operators, lots and drivers right now."
-        actions={<><Button variant="outline" size="sm">Last 7 days</Button><Button size="sm">Export report</Button></>} />
+      <PageHeader title="Umumiy ko'rinish" subtitle="Hozir barcha operatorlar, parkinglar va haydovchilar bo'yicha holat."
+        actions={<><Button variant="outline" size="sm">So'nggi 7 kun</Button><Button size="sm">Hisobotni eksport qilish</Button></>} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Business Owners" value="48" delta="+3 this week" icon={Users} />
-        <StatCard label="Parking Lots" value="240" delta="+12 this month" icon={Building2} tone="success" />
-        <StatCard label="Total Spaces" value="18,420" delta="9,210 occupied" icon={ParkingSquare} />
-        <StatCard label="Available Now" value="6,148" delta="33% of total" icon={CheckSquare} tone="success" />
-        <StatCard label="Revenue (today)" value="$42,180" delta="+18% vs yesterday" icon={DollarSign} tone="success" />
-        <StatCard label="Active Drivers" value="3,204" delta="492 booking now" icon={CarFront} />
-        <StatCard label="Camera Health" value="96.8%" delta="3 offline" icon={CameraIcon} tone="warning" />
-        <StatCard label="AI Calls / hr" value="128.4k" delta="97.2% accuracy" icon={Activity} tone="success" />
+        <StatCard label="Biznes egalari" value="48" delta="+3 bu hafta" icon={Users} />
+        <StatCard label="Parkinglar" value="240" delta="+12 bu oy" icon={Building2} tone="success" />
+        <StatCard label="Jami joylar" value="18,420" delta="9,210 band" icon={ParkingSquare} />
+        <StatCard label="Hozir bo'sh" value="6,148" delta="jamining 33%" icon={CheckSquare} tone="success" />
+        <StatCard label="Daromad (bugun)" value="$42,180" delta="kechagiga +18%" icon={DollarSign} tone="success" />
+        <StatCard label="Faol haydovchilar" value="3,204" delta="492 hozir bron qilmoqda" icon={CarFront} />
+        <StatCard label="Kameralar holati" value="96.8%" delta="3 ta o'chiq" icon={CameraIcon} tone="warning" />
+        <StatCard label="AI so'rovlar / soat" value="128.4k" delta="97.2% aniqlik" icon={Activity} tone="success" />
       </div>
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-5 lg:col-span-2">
-          <div className="flex items-center justify-between"><h3 className="text-sm font-semibold">24h Occupancy</h3><span className="text-xs text-muted-foreground">All lots</span></div>
+          <div className="flex items-center justify-between"><h3 className="text-sm font-semibold">24 soat bandlik</h3><span className="text-xs text-muted-foreground">Barcha parkinglar</span></div>
           <div className="mt-4 h-72">
             <ResponsiveContainer>
               <AreaChart data={occupancySeries}>
@@ -48,7 +48,7 @@ function AdminDashboard() {
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold">Live activity</h3>
+          <h3 className="text-sm font-semibold">Jonli faoliyat</h3>
           <div className="mt-3 space-y-3">
             {activityFeed.map((a) => (
               <div key={a.id} className="flex items-start gap-3">
@@ -64,7 +64,7 @@ function AdminDashboard() {
       </div>
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold">Revenue this week</h3>
+          <h3 className="text-sm font-semibold">Bu haftalik daromad</h3>
           <div className="mt-4 h-60">
             <ResponsiveContainer>
               <BarChart data={revenueSeries}>
@@ -78,7 +78,7 @@ function AdminDashboard() {
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h3 className="text-sm font-semibold">Peak hours</h3>
+          <h3 className="text-sm font-semibold">Eng band soatlar</h3>
           <div className="mt-4 h-60">
             <ResponsiveContainer>
               <LineChart data={peakHours}>
@@ -93,7 +93,7 @@ function AdminDashboard() {
         </div>
       </div>
       <div className="mt-6 rounded-2xl border border-border bg-card p-5">
-        <div className="flex items-center justify-between"><h3 className="text-sm font-semibold">Camera health</h3><Button size="sm" variant="ghost">View all</Button></div>
+        <div className="flex items-center justify-between"><h3 className="text-sm font-semibold">Kameralar holati</h3><Button size="sm" variant="ghost">Barchasi</Button></div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {mockCameras.map((c) => (
             <div key={c.id} className="rounded-xl border border-border p-4">
@@ -102,9 +102,9 @@ function AdminDashboard() {
                 <Badged tone={c.status==="online"?"success":c.status==="warning"?"warning":"danger"}><span className="mr-1"><StatusDot status={c.status} /></span>{c.status}</Badged>
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-                <div><div className="text-muted-foreground">Latency</div><div className="font-semibold">{c.latency}ms</div></div>
-                <div><div className="text-muted-foreground">Accuracy</div><div className="font-semibold">{(c.accuracy*100).toFixed(0)}%</div></div>
-                <div><div className="text-muted-foreground">Detects</div><div className="font-semibold">{c.detections}</div></div>
+                <div><div className="text-muted-foreground">Kechikish</div><div className="font-semibold">{c.latency}ms</div></div>
+                <div><div className="text-muted-foreground">Aniqlik</div><div className="font-semibold">{(c.accuracy*100).toFixed(0)}%</div></div>
+                <div><div className="text-muted-foreground">Aniqlashlar</div><div className="font-semibold">{c.detections}</div></div>
               </div>
             </div>
           ))}
