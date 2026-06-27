@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { mockLots } from "@/lib/mockData";
 import {
   Sparkles, Route as RouteIcon, Clock, Leaf, Wallet, Navigation, Star,
-  ChevronRight, AlertCircle, X, Brain, MapPin, RefreshCw,
+  ChevronRight, AlertCircle, X, Brain, MapPin, RefreshCw, Search as SearchIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { ParkingMap } from "@/components/ParkingMap";
+import { formatDistance, sortByDistance } from "@/components/ParkingMap";
 import { useRealtimeLots } from "@/lib/useRealtimeLots";
 import { useGeolocation } from "@/lib/useGeolocation";
 import { useDriverPrefs } from "@/lib/useDriverPrefs";
@@ -21,34 +22,61 @@ function SearchPage() {
   const geo = useGeolocation();
   const [prefs, setPrefs] = useDriverPrefs();
   const [rejectedIds, setRejectedIds] = useState<string[]>([]);
-  useEffect(() => { geo.request(); /* eslint-disable-next-line */ }, []);
+  const [aiOn, setAiOn] = useState(false);
+  const [query, setQuery] = useState("");
 
   const origin = geo.loc ?? { lat: mockLots[0].lat, lng: mockLots[0].lng };
 
-  const verdict = useMemo(() => {
-    const pool = lots.filter((l) => {
-      if (!geo.loc) return true;
-      const dx = (l.lat - geo.loc.lat) * 111;
-      const dy = (l.lng - geo.loc.lng) * 95;
+  const pool = useMemo(() => {
+    if (!geo.loc) return lots;
+    return lots.filter((l) => {
+      const dx = (l.lat - geo.loc!.lat) * 111;
+      const dy = (l.lng - geo.loc!.lng) * 95;
       return Math.sqrt(dx * dx + dy * dy) <= prefs.radiusKm;
     });
-    return aiRecommend(pool.length ? pool : lots, origin);
-  }, [lots, origin, geo.loc, prefs.radiusKm]);
+  }, [lots, geo.loc, prefs.radiusKm]);
 
-  const available = verdict.ranked.filter((c) => !rejectedIds.includes(c.lot.id));
+  const filteredPool = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return pool;
+    return pool.filter((l) => l.name.toLowerCase().includes(q) || l.address.toLowerCase().includes(q));
+  }, [pool, query]);
+
+  const verdict = useMemo(
+    () => (aiOn ? aiRecommend(filteredPool.length ? filteredPool : lots, origin) : null),
+    [aiOn, filteredPool, lots, origin],
+  );
+  const available = verdict?.ranked.filter((c) => !rejectedIds.includes(c.lot.id)) ?? [];
   const best: AiCandidate | undefined = available[0];
   const alternatives = available.slice(1, 4);
 
+  const sortedPlain = useMemo(
+    () => sortByDistance(filteredPool.length ? filteredPool : lots, origin),
+    [filteredPool, lots, origin],
+  );
+
   const reject = (id: string) => setRejectedIds((r) => [...r, id]);
   const reset = () => setRejectedIds([]);
+  const toggleAi = () => { setAiOn((v) => !v); setRejectedIds([]); };
 
   return (
     <div className="-mt-2 space-y-4 animate-fade-in pb-6">
+      {/* Search bar */}
+      <div className="relative">
+        <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Parking, hudud yoki manzil bo'yicha qidirish"
+          className="h-12 w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400 shadow-sm focus:border-[#1D4ED8] focus:outline-none focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
       {/* Map */}
       <div className="relative">
         <ParkingMap
-          lots={verdict.ranked.map((c) => c.lot)}
-          height="220px"
+          lots={filteredPool.length ? filteredPool : lots}
+          height="260px"
           selectedId={best?.lot.id}
           userLocation={geo.loc}
           onLocateClick={geo.request}
@@ -80,20 +108,59 @@ function SearchPage() {
         </div>
       )}
 
+      {/* AI Maslahat toggle */}
+      <button
+        onClick={toggleAi}
+        className={`flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-sm font-bold shadow-lg transition ${
+          aiOn
+            ? "bg-white text-[#1D4ED8] ring-2 ring-[#1D4ED8]"
+            : "bg-gradient-to-r from-[#1D4ED8] to-[#3B82F6] text-white shadow-blue-200/60"
+        }`}
+      >
+        <Sparkles className="h-4 w-4" />
+        {aiOn ? "AI maslahatni o'chirish" : "AI maslahat olish"}
+      </button>
+
+      {!aiOn && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-sm font-bold text-slate-900">Yaqin atrofdagi parkinglar</h3>
+            <span className="text-[11px] text-slate-500">{sortedPlain.length} ta natija</span>
+          </div>
+          {sortedPlain.slice(0, 12).map(({ lot, dist }) => {
+            const free = Math.max(0, lot.total - lot.occupied - lot.reserved);
+            return (
+              <Link key={lot.id} to="/driver/booking" className="flex items-center gap-3 rounded-2xl bg-white p-2.5 shadow-sm ring-1 ring-slate-200">
+                <img src={lot.image} alt="" className="h-14 w-14 shrink-0 rounded-xl object-cover" />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-sm font-bold text-slate-900">{lot.name}</div>
+                  <div className="mt-0.5 flex items-center gap-2 text-[11px] text-slate-500">
+                    <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3"/>{formatDistance(dist)}</span>
+                    <span className="inline-flex items-center gap-1"><Star className="h-3 w-3 fill-amber-400 text-amber-400"/>{lot.rating}</span>
+                    <span className={`font-semibold ${free === 0 ? "text-rose-600" : "text-emerald-600"}`}>{free} bo'sh</span>
+                  </div>
+                </div>
+                <ChevronRight className="h-4 w-4 text-slate-400" />
+              </Link>
+            );
+          })}
+        </div>
+      )}
+
       {/* AI Best Choice Card */}
-      {best ? (
+      {aiOn && best ? (
         <BestChoiceCard candidate={best} onReject={() => reject(best.lot.id)} />
-      ) : (
+      ) : aiOn ? (
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-6 text-center">
           <div className="text-sm font-semibold text-slate-700">Barcha variantlar rad etildi</div>
           <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#1D4ED8] px-4 py-2 text-xs font-semibold text-white">
             <RefreshCw className="h-3.5 w-3.5" /> Qaytadan boshlash
           </button>
         </div>
-      )}
+      ) : null}
 
       {/* Alternatives */}
-      {alternatives.length > 0 && (
+      {aiOn && alternatives.length > 0 && (
         <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-900">Muqobil variantlar</h3>
@@ -108,7 +175,7 @@ function SearchPage() {
       )}
 
       {/* AI Verdict */}
-      {best && (
+      {aiOn && best && verdict && (
         <div className="rounded-3xl bg-gradient-to-br from-[#0F172A] to-[#1D4ED8] p-5 text-white shadow-lg">
           <div className="flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-full bg-white/15 ring-1 ring-white/20">
