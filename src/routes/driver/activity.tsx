@@ -295,8 +295,8 @@ function LiveBookingCard({ booking, now }: { booking: import("@/lib/bookingStore
             </div>
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2 text-[11px]">
-            <Mini label="Spot" value={booking.spot} />
-            <Mini label="Level" value={booking.level} />
+            <Mini label="Spot" value={booking.spot || "—"} />
+            <Mini label="Level" value={booking.level || "—"} />
             <Mini label="Soatlik" value={`${booking.rateUzs/1000}k`} />
           </div>
         </div>
