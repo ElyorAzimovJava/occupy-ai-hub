@@ -338,7 +338,7 @@ function WalkInDialog({ onClose, lotId, lotName, lotAddress }: { onClose: () => 
   const submit = () => {
     if (!valid) { toast.error("Ism, davlat raqami va joy kerak"); return; }
     const initials = name.trim().split(/\s+/).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
-    bookingStore.addWalkIn({
+    const b = bookingStore.addWalkIn({
       lotId,
       lotName,
       lotAddress,
@@ -351,6 +351,7 @@ function WalkInDialog({ onClose, lotId, lotName, lotAddress }: { onClose: () => 
       plate: plate.toUpperCase(),
       rateUzs: Number(rate) || 15000,
     });
+    spotStore.occupy(lotId, level, spot.toUpperCase(), b.id);
     toast.success(`Walk-in qo'shildi: ${name} · ${spot.toUpperCase()}`);
     onClose();
   };
