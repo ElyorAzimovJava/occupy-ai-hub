@@ -1,8 +1,8 @@
 import type { ParkingLot } from "./mockData";
 
 // Uzbekistan market assumptions (2026)
-export const FUEL_PRICE_UZS = 13000; // AI-95 per liter
-export const FUEL_CONSUMPTION = 8 / 100; // L per km, city
+export const FUEL_PRICE_UZS = 12500; // AI-95 ~10-15k UZS per liter (2026 Uzbek market)
+export const FUEL_CONSUMPTION = 9 / 100; // L per km, realistic city consumption
 export const CITY_SPEED_KMH = 25;
 export const USD_TO_UZS = 12500;
 
