@@ -4,13 +4,13 @@ import {
   Sparkles, Route as RouteIcon, Clock, Leaf, Wallet, Navigation, Star,
   ChevronRight, AlertCircle, X, Brain, MapPin, RefreshCw, Search as SearchIcon,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { ParkingMap } from "@/components/ParkingMap";
-import { formatDistance, sortByDistance } from "@/components/ParkingMap";
+import { useMemo, useState } from "react";
+import { ParkingMap, formatDistance, sortByDistance } from "@/components/ParkingMap";
 import { useRealtimeLots } from "@/lib/useRealtimeLots";
 import { useGeolocation } from "@/lib/useGeolocation";
 import { useDriverPrefs } from "@/lib/useDriverPrefs";
-import { aiRecommend, formatUzs, type AiCandidate } from "@/lib/aiRecommend";
+import { aiRecommend, type AiCandidate } from "@/lib/aiRecommend";
+import { formatUzs } from "@/lib/aiRecommend";
 
 export const Route = createFileRoute("/driver/search")({
   head: () => ({ meta: [{ title: "AI Smart Selection - Driver" }] }),
