@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { mockLots, type ParkingLot } from "@/lib/mockData";
 import { ParkingMap, formatDistance, sortByDistance } from "@/components/ParkingMap";
-import { Search as SearchIcon, MapPin, Bookmark, Navigation } from "lucide-react";
+import { Search as SearchIcon, MapPin, Bookmark, Navigation, AlertCircle } from "lucide-react";
+import { useRealtimeLots } from "@/lib/useRealtimeLots";
+import { useGeolocation } from "@/lib/useGeolocation";
+import { useDriverPrefs } from "@/lib/useDriverPrefs";
 
 export const Route = createFileRoute("/driver/")({
   head: () => ({ meta: [{ title: "Home - Driver" }] }),
@@ -10,13 +13,18 @@ export const Route = createFileRoute("/driver/")({
 });
 
 function DriverHome() {
-  const [userLoc, setUserLoc] = useState<{ lat: number; lng: number } | null>(null);
+  const lots = useRealtimeLots();
+  const geo = useGeolocation();
+  const [prefs] = useDriverPrefs();
   const [selectedId, setSelectedId] = useState<string>(mockLots[0].id);
 
+  // Auto-request location on first mount
+  useEffect(() => { geo.request(); /* eslint-disable-next-line */ }, []);
+
   const ranked = useMemo(() => {
-    const origin = userLoc ?? { lat: mockLots[0].lat, lng: mockLots[0].lng };
-    return sortByDistance(mockLots, origin);
-  }, [userLoc]);
+    const origin = geo.loc ?? { lat: mockLots[0].lat, lng: mockLots[0].lng };
+    return sortByDistance(lots, origin);
+  }, [lots, geo.loc]);
 
   const nearest = ranked.find((r) => r.lot.id === selectedId) ?? ranked[0];
   const lot: ParkingLot = nearest.lot;
@@ -33,13 +41,27 @@ function DriverHome() {
         />
       </div>
 
+      {(geo.status === "denied" || geo.status === "unavailable") && (
+        <div className="flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="flex-1">
+            <div className="font-semibold">Location unavailable</div>
+            <div>{geo.error} You can still browse all lots below.</div>
+          </div>
+          <button onClick={geo.request} className="rounded-lg bg-white px-2 py-1 font-semibold text-amber-700 ring-1 ring-amber-200">Retry</button>
+        </div>
+      )}
+
       <div className="relative">
         <ParkingMap
-          lots={mockLots}
+          lots={lots}
           height="460px"
           selectedId={selectedId}
           onSelect={(l) => setSelectedId(l.id)}
-          onUserLocation={setUserLoc}
+          userLocation={geo.loc}
+          onLocateClick={geo.request}
+          locating={geo.status === "loading"}
+          radiusKm={prefs.radiusKm}
         />
         <div className="pointer-events-none absolute inset-x-3 bottom-3">
           <Link
@@ -65,7 +87,7 @@ function DriverHome() {
               </div>
             </div>
             <div className="absolute right-4 top-4 rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold text-emerald-700">
-              {free} spots available
+              {Math.max(0, free)} spots live
             </div>
           </Link>
         </div>
